@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Options de personnalisation</title>
+  <link rel="stylesheet" type="text/css" href="popup.css">
+</head>
+<body>
+  <h1>Options de personnalisation</h1>
+
+  <label>
+    <input type="checkbox" id="colorH1"> Colorier les balises h1 en vert
+  </label>
+
+  <label>
+    Mettre le texte en gras
+    <input type="checkbox" id="boldText"> 
+  </label>
+
+  <label>
+    Changer la couleur de la police du texte:
+    <input type="color" id="fontColor">
+  </label>
+
+  <label>
+    <input type="checkbox" id="borderImages"> Entourer les images d'une bordure rouge
+  </label>
+
+  <label>
+    Taille de la police:
+    <input type="number" id="fontSize" value="16">
+  </label>
+
+  <label>
+    <input type="checkbox" id="replaceImages"> Changer toutes les images
+  </label>
+
+  <div id="imageOptions" style="display: none;">
+    <label>
+      Image de remplacement (URL):
+      <input type="url" id="replacementImageUrl" placeholder="URL de l'image">
+    </label>
+    <label>
+      ou choisissez une image depuis votre ordinateur:
+      <input type="file" id="replacementImageFile" accept="image/*">
+    </label>
+  </div>
+
+  <button id="applyChanges">Appliquer les modifications</button>
+
+  <script src="popup.js"></script>
+</body>
+</html>

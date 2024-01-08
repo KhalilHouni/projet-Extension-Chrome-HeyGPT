@@ -1,0 +1,10 @@
+body {
+    width: 200px;
+    padding: 10px;
+  }
+  
+  label, button {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
