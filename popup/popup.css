@@ -1,0 +1,139 @@
+/* Global styles */
+
+* {
+	margin: 0;
+}
+
+body {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.stick1, .stick2 {
+	width: 100%;
+	height: 0.5%;
+	background-color: black;
+}
+
+
+/* Upper Popup */
+
+.up {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 380px;
+	height: 70px;
+	background-color: #4549b3;
+}
+
+h1 {
+	font-family: 'Rubik Doodle Shadow';
+	margin-left: 10px;
+	font-size: 32px;
+}
+
+
+/* Mid Popup */
+
+.mid {
+	background-color: #89a2ea;
+	width: 100%;
+	height: 250px
+}
+
+/* Lower Popup */
+
+.lower {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+    width: 380px;
+    height: 70px;
+    background-color: #4549b3;
+}
+
+.Message {
+	width: 220px;
+	height: 40px;
+	border-radius: 10px;
+	background-color: #40414f;
+	transform: translate(0px,0px);
+	box-shadow: 2px 2px #34343f;
+}
+
+.MsgInput {
+	font-size: 12px;
+	border-radius: 5px;
+	background-color: #40414f;
+	border: none;
+	outline: none;
+	width: 150px;
+	height: 12px;
+	transform: translate(5px,-6px);
+	color: white;
+	padding: 10px;
+	font-weight: bold;
+}
+
+.SendSVG {
+	width: 23px;
+	height: 30px;
+	border-width: 30px;
+	transform: translate(15px,5px);
+	background-size: 10px;
+	border-radius: 10px;
+	transition: 0.3s;
+}
+
+.SendSVG:hover {
+	background-color: #2b2b35;
+}
+
+.l {
+	position: absolute;
+	width: 1%;
+	height: 100%;
+	background-color: #2e2f38;
+	transform: translate(-20px,0px);
+}
+
+	/* Mic Button */
+
+.switch {
+	position: relative;
+	width: 40px;
+	height: 40px;
+	display: flex;
+	margin-right: 10px;
+	justify-content: center;
+	align-items: center;
+	background-color: rgb(60,64,67);
+	color: #fff;
+	border-radius: 50%;
+	cursor: pointer;
+	transition: all .3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.mic-on {
+	width: 50%;
+	height: 50%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 4;
+	transition: all .3s ease-in-out;
+}
+
+.switch:hover {
+	background-color: rgba(60,64,67, 0.8);
+}
+
+#checkbox {
+	display: none;
+}
+
+#checkbox:checked + .switch {
+	opacity: 1;
+}
