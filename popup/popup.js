@@ -1,8 +1,20 @@
 const buttonSend = document.getElementById('button-send');
 const inputQuestion = document.getElementById('user-question');
 const convArea = document.getElementById('conv');
-const apiKey = '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';
+const deleteButton = document.getElementById('delete-button');
+const apiKey = 'API_KEY';
 const url = 'https://api.openai.com/v1/completions';
+
+
+// When the page is loaded print welcome message
+document.addEventListener('DOMContentLoaded', function() {
+    var welcome = document.createElement('p');
+    welcome.textContent = "Bienvenue, je suis Hey GPT. Posez moi n'importe quelle question, oralement avec le boutton microphone en dessous, ou textuellement avec le champ pour insérer votre message en dessous aussi. Je ferais la meilleure réponse possible. J'ai été fait avec ❤️ par Khalil, Maud et Rémy.";
+	var gptTag = createGptTag();
+	convArea.appendChild(gptTag);
+	convArea.appendChild(welcome);
+});
+
 
 // Squeeze the mic button
 document.getElementById('checkbox').addEventListener('change', function() {
@@ -21,16 +33,17 @@ document.getElementById('checkbox').addEventListener('change', function() {
 // Get the user question from the input when button send is clicked
 // Then after clicking the button show the user question on the mid div
 buttonSend.addEventListener('click', async function() {
+	convArea.innerHTML = "";
 	if (!inputQuestion.value) 
 		return ;
-    var userQuestion = createUserQuestion();
 	var userTag = createUserTag();
+    var userQuestion = createUserQuestion();
 	var gptTag = createGptTag();
-	var gptAnswer = await askQuestion(userQuestion.textContent);
-	console.log(gptAnswer);
 	convArea.appendChild(userTag);
 	convArea.appendChild(userQuestion);
 	convArea.appendChild(gptTag);
+	var gptAnswer = await askQuestion(userQuestion.textContent);
+	console.log(gptAnswer);
 	convArea.appendChild(gptAnswer);
 	scrollToBottom();
 });
@@ -50,7 +63,7 @@ function createUserQuestion() {
 
 function createGptTag() {
 	var gptTag = document.createElement('h4');
-    gptTag.textContent = 'GPT';
+    gptTag.textContent = 'Hey GPT';
     return gptTag;
 }
 
@@ -58,13 +71,9 @@ function scrollToBottom() {
 	convArea.scrollTop = convArea.scrollHeight;
 }
 
-
-
-
-// Fonction pour appeler l'API à ChatGPT
+// Function to call ChatGPT's API to ask the user question
 
 async function askQuestion(userQuestion) {
-	console.log(userQuestion);
     const headers = {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${apiKey}`,
@@ -97,3 +106,8 @@ async function createAnswerGpt(response) {
 	answer.textContent = data.choices[0].text;
 	return answer;
 }
+
+// Function to delete conversation when delete button is clicked
+deleteButton.addEventListener('click', function() {
+    convArea.innerHTML = "";
+});
