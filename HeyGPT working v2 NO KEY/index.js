@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const app = express();
 const port = 3000;
 
-const apiKey = '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';
+const apiKey = 'API_KEY';
 const apiUrl = 'https://api.openai.com/v1/completions';
 const maxQuestions = 20;
 let userQuestions = [];
