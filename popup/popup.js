@@ -1,6 +1,8 @@
 const buttonSend = document.getElementById('button-send');
 const inputQuestion = document.getElementById('user-question');
 const convArea = document.getElementById('conv');
+const apiKey = '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';
+const url = 'https://api.openai.com/v1/completions';
 
 // Squeeze the mic button
 document.getElementById('checkbox').addEventListener('change', function() {
@@ -18,12 +20,14 @@ document.getElementById('checkbox').addEventListener('change', function() {
 
 // Get the user question from the input when button send is clicked
 // Then after clicking the button show the user question on the mid div
-buttonSend.addEventListener('click', function() {
+buttonSend.addEventListener('click', async function() {
+	if (!inputQuestion.value) 
+		return ;
     var userQuestion = createUserQuestion();
-	if (!userQuestion) return;
 	var userTag = createUserTag();
 	var gptTag = createGptTag();
-	var gptAnswer = askQuestion(userQuestion);
+	var gptAnswer = await askQuestion(userQuestion.textContent);
+	console.log(gptAnswer);
 	convArea.appendChild(userTag);
 	convArea.appendChild(userQuestion);
 	convArea.appendChild(gptTag);
@@ -54,19 +58,42 @@ function scrollToBottom() {
 	convArea.scrollTop = convArea.scrollHeight;
 }
 
+
+
+
+// Fonction pour appeler l'API à ChatGPT
+
 async function askQuestion(userQuestion) {
+	console.log(userQuestion);
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+    };
 
-    if (!userQuestion) return;
-
-    const response = await fetch('/ask', {
-	method: 'POST',
-    headers: {
-    	'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ question: userQuestion }),
+    const body = JSON.stringify({
+		model: 'gpt-3.5-turbo-instruct',
+		prompt: `${userQuestion}`,
+		temperature: 0.7,
+		max_tokens: 150,
     });
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: headers,
+            body: body,
+        });
 
-    const result = await response.json();
-    const botReply = result.botReply;
-	return botReply;
+        const answer = await createAnswerGpt(response);
+		return answer; // La réponse de ChatGPT est stockée dans cette variable
+    } catch (error) {
+        console.error('Erreur lors de l\'appel API à ChatGPT:', error);
+        return null;
+    }
+}
+
+async function createAnswerGpt(response) {
+	const data = await response.json();
+	const answer = document.createElement('p');
+	answer.textContent = data.choices[0].text;
+	return answer;
 }
