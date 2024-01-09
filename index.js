@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const app = express();
 const port = 3000;
 
-const apiKey = 'API_KEY';
+const apiKey = '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';
 const apiUrl = 'https://api.openai.com/v1/completions';
 const maxQuestions = 20;
 let userQuestions = [];
@@ -54,3 +54,21 @@ app.post('/ask', async (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
 });
+
+
+export async function askQuestion(userQuestion) {
+
+    if (!userQuestion) return;
+
+    const response = await fetch('/ask', {
+	method: 'POST',
+    headers: {
+    	'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ question: userQuestion }),
+    });
+
+    const result = await response.json();
+    const botReply = result.botReply;
+	return botReply;
+}

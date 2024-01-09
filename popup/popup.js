@@ -1,6 +1,7 @@
 const buttonSend = document.getElementById('button-send');
 const inputQuestion = document.getElementById('user-question');
-
+const convArea = document.getElementById('conv');
+import { askQuestion } from "../index.js";
 
 // Squeeze the mic button
 document.getElementById('checkbox').addEventListener('change', function() {
@@ -20,13 +21,15 @@ document.getElementById('checkbox').addEventListener('change', function() {
 // Then after clicking the button show the user question on the mid div
 buttonSend.addEventListener('click', function() {
     var userQuestion = createUserQuestion();
+	if (!userQuestion) return;
 	var userTag = createUserTag();
-	var gptAnswer = createGptAnswer();
 	var gptTag = createGptTag();
-	document.getElementById('conv').appendChild(userTag);
-	document.getElementById('conv').appendChild(userQuestion);
-	document.getElementById('conv').appendChild(gptTag);
-	document.getElementById('conv').appendChild(gptAnswer);
+	var gptAnswer = askQuestion(userQuestion);
+	convArea.appendChild(userTag);
+	convArea.appendChild(userQuestion);
+	convArea.appendChild(gptTag);
+	convArea.appendChild(gptAnswer);
+	scrollToBottom();
 });
 
 function createUserTag() {
@@ -48,9 +51,7 @@ function createGptTag() {
     return gptTag;
 }
 
-function createGptAnswer() {
-	var gptAnswer = document.createElement('p');
-    gptAnswer.textContent = "prout";
-    return gptAnswer;
+function scrollToBottom() {
+	convArea.scrollTop = convArea.scrollHeight;
 }
 

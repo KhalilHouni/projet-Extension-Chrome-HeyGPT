@@ -55,9 +55,15 @@ h1 {
 }
 
 .conv {
-	width: 85%;
-	height: 95%;
+    width: 85%;
+    height: 95%;
+    overflow: scroll; /* Permet le défilement */
 }
+
+.conv::-webkit-scrollbar {
+    width: 0; /* Masque la barre de défilement */
+}
+
 
 
 
