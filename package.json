@@ -1,5 +1,4 @@
 {
-	"type": "module",
   "name": "chatbot",
   "version": "1.0.0",
   "main": "chatbot-js.js",

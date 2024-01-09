@@ -14,7 +14,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile(__dirname + '/popup/popup.html');
 });
 
 app.post('/ask', async (req, res) => {
@@ -54,21 +54,3 @@ app.post('/ask', async (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
 });
-
-
-export async function askQuestion(userQuestion) {
-
-    if (!userQuestion) return;
-
-    const response = await fetch('/ask', {
-	method: 'POST',
-    headers: {
-    	'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ question: userQuestion }),
-    });
-
-    const result = await response.json();
-    const botReply = result.botReply;
-	return botReply;
-}

@@ -1,7 +1,6 @@
 const buttonSend = document.getElementById('button-send');
 const inputQuestion = document.getElementById('user-question');
 const convArea = document.getElementById('conv');
-import { askQuestion } from "../index.js";
 
 // Squeeze the mic button
 document.getElementById('checkbox').addEventListener('change', function() {
@@ -55,3 +54,19 @@ function scrollToBottom() {
 	convArea.scrollTop = convArea.scrollHeight;
 }
 
+async function askQuestion(userQuestion) {
+
+    if (!userQuestion) return;
+
+    const response = await fetch('/ask', {
+	method: 'POST',
+    headers: {
+    	'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ question: userQuestion }),
+    });
+
+    const result = await response.json();
+    const botReply = result.botReply;
+	return botReply;
+}
