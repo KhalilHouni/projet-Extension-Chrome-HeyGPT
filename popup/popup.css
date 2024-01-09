@@ -47,7 +47,7 @@ h1 {
 .mid {
 	background-color: #89a2ea ;
 	width: 100%;
-	height: 250px;
+	height: 300px;
 	box-shadow: inset 3px -3px 15px rgba(0, 0, 0, 0.5);
 	display: flex;
 	align-items: center;
@@ -103,7 +103,7 @@ h1 {
 }
 
 .SendSVG {
-	width: 23px;
+	width: 25px;
 	height: 30px;
 	border-width: 30px;
 	transform: translate(15px,5px);
@@ -113,7 +113,7 @@ h1 {
 }
 
 .SendSVG:hover {
-	background-color: #2b2b35;
+	background-color: #2e2f38;
 }
 
 .l {
@@ -205,7 +205,7 @@ h1 {
 	transform: scale(0.98);
 }
 
-.tooltip {
+.tooltip1, .tooltip2 {
 	--tooltip-color: rgb(41, 41, 41);
 	position: absolute;
 	top: -40px;
@@ -223,7 +223,7 @@ h1 {
 	transition: all 0.5s;
 }
 
-.tooltip::before {
+.tooltip1::before {
 	position: absolute;
 	width: 10px;
 	height: 10px;
@@ -233,6 +233,20 @@ h1 {
 	bottom: -10%;
 }
 
-.deleteButton:hover .tooltip {
+.tooltip2::before {
+	position: absolute;
+	width: 10px;
+	height: 10px;
+	transform: rotate(45deg);
+	content: "";
+	background-color: var(--tooltip-color);
+	bottom: -10%;
+}
+
+.deleteButton:hover .tooltip1 {
+	opacity: 1;
+}
+
+.switch:hover .tooltip2 {
 	opacity: 1;
 }

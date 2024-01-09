@@ -2,7 +2,7 @@ const buttonSend = document.getElementById('button-send');
 const inputQuestion = document.getElementById('user-question');
 const convArea = document.getElementById('conv');
 const deleteButton = document.getElementById('delete-button');
-const apiKey = 'API_KEY';
+const apiKey = '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';
 const url = 'https://api.openai.com/v1/completions';
 
 
@@ -33,9 +33,9 @@ document.getElementById('checkbox').addEventListener('change', function() {
 // Get the user question from the input when button send is clicked
 // Then after clicking the button show the user question on the mid div
 buttonSend.addEventListener('click', async function() {
-	convArea.innerHTML = "";
 	if (!inputQuestion.value) 
 		return ;
+	convArea.innerHTML = "";
 	var userTag = createUserTag();
     var userQuestion = createUserQuestion();
 	var gptTag = createGptTag();
@@ -72,7 +72,6 @@ function scrollToBottom() {
 }
 
 // Function to call ChatGPT's API to ask the user question
-
 async function askQuestion(userQuestion) {
     const headers = {
         'Content-Type': 'application/json',
