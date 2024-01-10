@@ -2,18 +2,17 @@ const buttonSend = document.getElementById('button-send');
 const inputQuestion = document.getElementById('user-question');
 const convArea = document.getElementById('conv');
 const deleteButton = document.getElementById('delete-button');
-const apiKey = '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';
-const url = 'https://api.openai.com/v1/completions';
+const API_KEY = 'API_KEY';
+const URL = 'https://api.openai.com/v1/completions';
 let recognition;
-let isVoiceEnabled = false; // Set bot's voice to "off" by default
+let isVoiceEnabled = true; // Set bot's voice to "off" by default
 
 const voiceControlCheckbox = document.getElementById('voice-control-checkbox');
-const userVoiceCheckbox = document.getElementById('user-voice-checkbox');
 
 // When the page is loaded print welcome message
 document.addEventListener('DOMContentLoaded', function() {
     var welcome = document.createElement('p');
-    welcome.textContent = "Bienvenue, je suis Hey GPT. Posez moi n'importe quelle question, oralement avec le boutton microphone en dessous, ou textuellement avec le champ pour insérer votre message en dessous aussi. Je ferais la meilleure réponse possible. J'ai été fait avec ❤️ par Khalil, Maud et Rémy.";
+    welcome.textContent = "Bienvenue, je suis Hey GPT. Posez moi n'importe quelle question, oralement ou textuellement avec les boutons dédiés en dessous. Je ferais la meilleure réponse possible. J'ai été fait avec ❤️ par Khalil, Maud et Rémy.";
 	var gptTag = createGptTag();
 	convArea.appendChild(gptTag);
 	convArea.appendChild(welcome);
@@ -30,14 +29,7 @@ voiceControlCheckbox.addEventListener('change', function() {
     }
 });
 
-// Event listener for user voice control checkbox
-userVoiceCheckbox.addEventListener('change', function() {
-    if (this.checked) {
-        startUserVoiceRecognition();
-    } else {
-        stopUserVoiceRecognition();
-    }
-});
+
 
 function startSpeechRecognition() {
     if (!recognition) {
@@ -54,26 +46,6 @@ function startSpeechRecognition() {
 }
 
 function stopSpeechRecognition() {
-    if (recognition) {
-        recognition.stop();
-    }
-}
-
-function startUserVoiceRecognition() {
-    if (!recognition) {
-        recognition = new webkitSpeechRecognition();
-        recognition.continuous = false;
-        recognition.lang = "en-US";
-        recognition.onresult = function(event) {
-            const speechToText = event.results[0][0].transcript;
-            inputQuestion.value = speechToText;
-            triggerChatGPT(speechToText);
-        };
-    }
-    recognition.start();
-}
-
-function stopUserVoiceRecognition() {
     if (recognition) {
         recognition.stop();
     }
@@ -173,7 +145,7 @@ function scrollToBottom() {
 async function askQuestion(userQuestion) {
     const headers = {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
+        'Authorization': `Bearer ${API_KEY}`,
     };
 
     const body = JSON.stringify({
@@ -186,7 +158,7 @@ async function askQuestion(userQuestion) {
     });
 
     try {
-        const response = await fetch(url, {
+        const response = await fetch(URL, {
             method: 'POST',
             headers: headers,
             body: body,
