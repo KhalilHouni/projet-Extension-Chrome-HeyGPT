@@ -29,13 +29,11 @@ voiceControlCheckbox.addEventListener('change', function() {
     }
 });
 
-
-
 function startSpeechRecognition() {
     if (!recognition) {
         recognition = new webkitSpeechRecognition();
         recognition.continuous = false;
-        recognition.lang = "en-US";
+        recognition.lang = "fr-FR";
         recognition.onresult = function(event) {
             const speechToText = event.results[0][0].transcript;
             inputQuestion.value = speechToText;

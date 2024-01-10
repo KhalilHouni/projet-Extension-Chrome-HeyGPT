@@ -29,7 +29,7 @@ body {
 	justify-content: center;
 	width: 380px;
 	height: 70px;
-	background-color: #4549b3;
+	background-color: #0642FC;
 	box-shadow: inset 3px -3px 15px rgba(0, 0, 0, 0.5);
 }
 
@@ -37,6 +37,7 @@ h1 {
 	font-family: 'Rubik Doodle Shadow';
 	margin-left: 10px;
 	font-size: 32px;
+	color: black;
 }
 
 
@@ -45,7 +46,7 @@ h1 {
 /* Mid Popup */
 
 .mid {
-	background-color: #89a2ea ;
+	background-color: #786BFD ;
 	width: 100%;
 	height: 300px;
 	box-shadow: inset 3px -3px 15px rgba(0, 0, 0, 0.5);
@@ -75,7 +76,7 @@ h1 {
 	justify-content: center;
     width: 380px;
     height: 70px;
-    background-color: #4549b3;
+    background-color: #0642FC;
 	box-shadow: inset 3px -3px 15px rgba(0, 0, 0, 0.5);
 }
 
@@ -83,7 +84,7 @@ h1 {
 	width: 220px;
 	height: 40px;
 	border-radius: 10px;
-	background-color: #40414f;
+	background-color: black;
 	transform: translate(0px,0px);
 	box-shadow: 2px 2px #34343f;
 }
@@ -91,14 +92,14 @@ h1 {
 .MsgInput {
 	font-size: 12px;
 	border-radius: 5px;
-	background-color: #40414f;
+	background-color: black;
 	border: none;
 	outline: none;
 	width: 150px;
 	height: 12px;
 	transform: translate(5px,-6px);
-	color: white;
 	padding: 10px;
+	color: white;
 	font-weight: bold;
 }
 
@@ -134,7 +135,7 @@ h1 {
 	margin-left: 15px;
 	justify-content: center;
 	align-items: center;
-	background-color: #40414f;
+	background-color: black;
 	color: #fff;
 	border-radius: 50%;
 	cursor: pointer;
