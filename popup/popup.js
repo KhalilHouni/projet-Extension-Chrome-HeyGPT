@@ -2,8 +2,8 @@ const buttonSend = document.getElementById('button-send');
 const inputQuestion = document.getElementById('user-question');
 const convArea = document.getElementById('conv');
 const deleteButton = document.getElementById('delete-button');
-const apiKey = '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';
-const url = 'https://api.openai.com/v1/completions';
+const API_KEY = 'API_KEY';
+const URL = 'https://api.openai.com/v1/completions';
 
 
 // When the page is loaded print welcome message
@@ -75,7 +75,7 @@ function scrollToBottom() {
 async function askQuestion(userQuestion) {
     const headers = {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
+        'Authorization': `Bearer ${API_KEY}`,
     };
 
     const body = JSON.stringify({
@@ -85,7 +85,7 @@ async function askQuestion(userQuestion) {
 		max_tokens: 150,
     });
     try {
-        const response = await fetch(url, {
+        const response = await fetch(URL, {
             method: 'POST',
             headers: headers,
             body: body,
