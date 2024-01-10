@@ -250,3 +250,15 @@ h1 {
 .switch:hover .tooltip2 {
 	opacity: 1;
 }
+
+
+button#bot-voice-button {
+    width: 100px;
+    height: 40px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}

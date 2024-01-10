@@ -2,9 +2,13 @@ const buttonSend = document.getElementById('button-send');
 const inputQuestion = document.getElementById('user-question');
 const convArea = document.getElementById('conv');
 const deleteButton = document.getElementById('delete-button');
-const API_KEY = 'API_KEY';
-const URL = 'https://api.openai.com/v1/completions';
+const apiKey = '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';
+const url = 'https://api.openai.com/v1/completions';
+let recognition;
+let isVoiceEnabled = false; // Set bot's voice to "off" by default
 
+const voiceControlCheckbox = document.getElementById('voice-control-checkbox');
+const userVoiceCheckbox = document.getElementById('user-voice-checkbox');
 
 // When the page is loaded print welcome message
 document.addEventListener('DOMContentLoaded', function() {
@@ -16,94 +20,198 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-// Squeeze the mic button
-document.getElementById('checkbox').addEventListener('change', function() {
-	if (this.checked) {
-	  document.querySelector('.switch').style.transform = 'scale(1.2)';
-	  setTimeout(function() {
-		document.querySelector('.switch').style.transform = 'scale(1)';
-	  }, 500);
-	  this.checked = false;
-	} else {
-	  document.querySelector('.switch').style.transform = 'scale(1)';
-	}
+// Event listener for voice control checkbox
+voiceControlCheckbox.addEventListener('change', function() {
+    isVoiceEnabled = this.checked;
+    if (isVoiceEnabled) {
+        startSpeechRecognition();
+    } else {
+        stopSpeechRecognition();
+    }
 });
 
-
-// Get the user question from the input when button send is clicked
-// Then after clicking the button show the user question on the mid div
-buttonSend.addEventListener('click', async function() {
-	if (!inputQuestion.value) 
-		return ;
-	convArea.innerHTML = "";
-	var userTag = createUserTag();
-    var userQuestion = createUserQuestion();
-	var gptTag = createGptTag();
-	convArea.appendChild(userTag);
-	convArea.appendChild(userQuestion);
-	convArea.appendChild(gptTag);
-	var gptAnswer = await askQuestion(userQuestion.textContent);
-	console.log(gptAnswer);
-	convArea.appendChild(gptAnswer);
-	scrollToBottom();
+// Event listener for user voice control checkbox
+userVoiceCheckbox.addEventListener('change', function() {
+    if (this.checked) {
+        startUserVoiceRecognition();
+    } else {
+        stopUserVoiceRecognition();
+    }
 });
 
+function startSpeechRecognition() {
+    if (!recognition) {
+        recognition = new webkitSpeechRecognition();
+        recognition.continuous = false;
+        recognition.lang = "en-US";
+        recognition.onresult = function(event) {
+            const speechToText = event.results[0][0].transcript;
+            inputQuestion.value = speechToText;
+            triggerChatGPT(speechToText);
+        };
+    }
+    recognition.start();
+}
+
+function stopSpeechRecognition() {
+    if (recognition) {
+        recognition.stop();
+    }
+}
+
+function startUserVoiceRecognition() {
+    if (!recognition) {
+        recognition = new webkitSpeechRecognition();
+        recognition.continuous = false;
+        recognition.lang = "en-US";
+        recognition.onresult = function(event) {
+            const speechToText = event.results[0][0].transcript;
+            inputQuestion.value = speechToText;
+            triggerChatGPT(speechToText);
+        };
+    }
+    recognition.start();
+}
+
+function stopUserVoiceRecognition() {
+    if (recognition) {
+        recognition.stop();
+    }
+}
+
+// Start speech recognition
+function startSpeechRecognition() {
+    recognition.start();
+    recognition.onresult = function(event) {
+        const speechToText = event.results[0][0].transcript;
+        inputQuestion.value = speechToText;
+        triggerChatGPT(speechToText);
+    };
+}
+
+// Stop speech recognition
+function stopSpeechRecognition() {
+    recognition.stop();
+}
+
+// Event listener for send button
+buttonSend.addEventListener('click', function() {
+    const userQuestion = inputQuestion.value;
+    if (userQuestion) {
+        triggerChatGPT(userQuestion);
+    }
+});
+
+// Function to trigger ChatGPT with user's input
+async function triggerChatGPT(userInput) {
+    clearConversation();
+
+    const userTag = createUserTag();
+    const userQuestion = createUserQuestion(userInput);
+    const gptTag = createGptTag();
+
+    appendToConversation(userTag);
+    appendToConversation(userQuestion);
+    appendToConversation(gptTag);
+
+    const gptAnswer = await askQuestion(userInput);
+    appendToConversation(gptAnswer);
+    if (isVoiceEnabled) {
+        playBotResponse(gptAnswer.textContent);
+    }
+    scrollToBottom();
+}
+
+// Event listener for stop audio button
+document.getElementById('stop-audio').addEventListener('click', function() {
+    stopAudio();
+});
+
+// Function to stop the audio
+function stopAudio() {
+    window.speechSynthesis.cancel();
+}
+
+// Function to clear conversation
+function clearConversation() {
+    convArea.innerHTML = "";
+}
+
+// Function to create user tag
 function createUserTag() {
-	var userTag = document.createElement('h4');
-	userTag.textContent = 'User';
-	return userTag;
+    const userTag = document.createElement('h4');
+    userTag.textContent = 'User';
+    return userTag;
 }
 
-function createUserQuestion() {
-	var userQuestion = document.createElement('p');
-	userQuestion.textContent = inputQuestion.value;
-	inputQuestion.value = "";
-	return userQuestion;
+// Function to create user question element
+function createUserQuestion(userInput) {
+    const userQuestion = document.createElement('p');
+    userQuestion.textContent = userInput;
+    inputQuestion.value = "";
+    return userQuestion;
 }
 
+// Function to create Hey GPT tag
 function createGptTag() {
-	var gptTag = document.createElement('h4');
+    const gptTag = document.createElement('h4');
     gptTag.textContent = 'Hey GPT';
     return gptTag;
 }
 
+// Function to append element to conversation area
+function appendToConversation(element) {
+    convArea.appendChild(element);
+}
+
+// Function to scroll to the bottom of the conversation area
 function scrollToBottom() {
-	convArea.scrollTop = convArea.scrollHeight;
+    convArea.scrollTop = convArea.scrollHeight;
 }
 
 // Function to call ChatGPT's API to ask the user question
 async function askQuestion(userQuestion) {
     const headers = {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${API_KEY}`,
+        'Authorization': `Bearer ${apiKey}`,
     };
 
     const body = JSON.stringify({
-		model: 'gpt-3.5-turbo-instruct',
-		prompt: `${userQuestion}`,
-		temperature: 0.7,
-		max_tokens: 150,
+        model: 'gpt-3.5-turbo-instruct',
+        prompt: `${userQuestion}`,
+        temperature: 0.5,
+        max_tokens: 150,
+        frequency_penalty: 0.0,
+        presence_penalty: 0.0,
     });
+
     try {
-        const response = await fetch(URL, {
+        const response = await fetch(url, {
             method: 'POST',
             headers: headers,
             body: body,
         });
 
         const answer = await createAnswerGpt(response);
-		return answer; // La réponse de ChatGPT est stockée dans cette variable
+        return answer;
     } catch (error) {
-        console.error('Erreur lors de l\'appel API à ChatGPT:', error);
+        console.error('Error calling ChatGPT API:', error);
         return null;
     }
 }
 
+// Function to create bot's response element
 async function createAnswerGpt(response) {
-	const data = await response.json();
-	const answer = document.createElement('p');
-	answer.textContent = data.choices[0].text;
-	return answer;
+    const data = await response.json();
+    const answer = document.createElement('p');
+    answer.textContent = data.choices[0].text;
+    return answer;
+}
+
+// Function to play bot's response as speech
+function playBotResponse(responseText) {
+    const utterance = new SpeechSynthesisUtterance(responseText);
+    window.speechSynthesis.speak(utterance);
 }
 
 // Function to delete conversation when delete button is clicked

@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Options de personnalisation</title>
-		<link rel="preconnect" href="https://fonts.googleapis.com">
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Karla:wght@400;700&family=Rubik+Doodle+Shadow&display=swap" rel="stylesheet">
-		<link rel="stylesheet" type="text/css" href="popup.css">
-		<meta charset="UTF-8">
-	</head>
-	<body>
+<head>
+    <title>Options de personnalisation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Karla:wght@400;700&family=Rubik+Doodle+Shadow&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="popup.css">
+    <meta charset="UTF-8">
+</head>
+<body>
 		<div class="up">
 			<img src="/img/icon32.png" />
 			<h1>Hey GPT !</h1>
@@ -69,8 +69,12 @@
 				<span class="tooltip2">Record</span>
 			</label>
 		</div>
-
+		
+		<input type="checkbox" id="voice-control-checkbox">
+		<label for="voice-control-checkbox">Enable Bot Voice</label>
+		<input type="checkbox" id="user-voice-checkbox">
+<label for="user-voice-checkbox">Enable User Voice</label>
+<button id="stop-audio">Stop Audio</button>
 		<script src="popup.js"></script>
-		<script type="module" src="/index.js"></script>
 	</body>
-</html>
+	</html>
