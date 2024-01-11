@@ -186,5 +186,6 @@ function playBotResponse(responseText) {
 
 // Function to delete conversation when delete button is clicked
 deleteButton.addEventListener('click', function() {
+	stopAudio();
     convArea.innerHTML = "";
 });
