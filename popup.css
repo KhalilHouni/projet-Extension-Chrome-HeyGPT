@@ -256,7 +256,7 @@ h1 {
 	transform: scale(0.98);
 }
 
-.tooltip1, .tooltip2 {
+.tooltip1, .tooltip2, .tooltip3 {
 	--tooltip-color: rgb(41, 41, 41);
 	position: absolute;
 	top: -40px;
@@ -274,7 +274,11 @@ h1 {
 	transition: all 0.5s;
 }
 
-.tooltip1::before {
+.tooltip1, .tooltip3 {
+	width: 22px
+}
+
+.tooltip1::before, .tooltip2::before, .tooltip3::before {
 	position: absolute;
 	width: 10px;
 	height: 10px;
@@ -284,24 +288,12 @@ h1 {
 	bottom: -10%;
 }
 
-.tooltip2::before {
-	position: absolute;
-	width: 10px;
-	height: 10px;
-	transform: rotate(45deg);
-	content: "";
-	background-color: var(--tooltip-color);
-	bottom: -10%;
-}
 
-
-.deleteButton:hover .tooltip1 {
+.deleteButton:hover .tooltip1, .switch:hover .tooltip2, .container:hover .tooltip3 {
 	opacity: 1;
 }
 
-.switch:hover .tooltip2 {
-	opacity: 1;
-}
+
 
 /* Settings */
 

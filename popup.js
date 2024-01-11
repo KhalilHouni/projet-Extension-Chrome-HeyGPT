@@ -209,12 +209,8 @@ function requestMicrophonePermission() {
     navigator.mediaDevices.getUserMedia({ audio: true })
         .then(function(stream) {
             console.log('Microphone access granted');
-            // Vous pouvez effectuer d'autres actions ici après avoir obtenu l'accès au microphone
         })
         .catch(function(error) {
             console.error('Error accessing microphone:', error);
-
-            // Affichez un message à l'utilisateur pour l'informer que l'accès au microphone est nécessaire
-            // et les invite à vérifier les paramètres de leur navigateur.
         });
 }
