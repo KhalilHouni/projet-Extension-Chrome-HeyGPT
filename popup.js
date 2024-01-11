@@ -2,9 +2,9 @@ const buttonSend = document.getElementById('button-send');
 const inputQuestion = document.getElementById('user-question');
 const convArea = document.getElementById('conv');
 const deleteButton = document.getElementById('delete-button');
-const API_KEY = 'API_KEY';
+const API_KEY = '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';
 const URL = 'https://api.openai.com/v1/completions';
-let recognition;
+let synthesis;
 let isVoiceEnabled = true; // Set bot's voice to "off" by default
 
 const voiceControlCheckbox = document.getElementById('voice-control-checkbox');
@@ -23,45 +23,35 @@ document.addEventListener('DOMContentLoaded', function() {
 voiceControlCheckbox.addEventListener('change', function() {
     isVoiceEnabled = this.checked;
     if (isVoiceEnabled) {
-        startSpeechRecognition();
+        startSpeechSynthesis();
     } else {
-        stopSpeechRecognition();
+        stopSpeechSynthesis();
     }
 });
 
-function startSpeechRecognition() {
-    if (!recognition) {
-        recognition = new webkitSpeechRecognition();
-        recognition.continuous = false;
-        recognition.lang = "fr-FR";
-        recognition.onresult = function(event) {
+function startSpeechSynthesis() {
+    if (!synthesis) {
+        synthesis = new webkitSpeechsynthesis();
+        synthesis.continuous = false;
+        synthesis.lang = "fr-FR";
+        synthesis.onresult = function(event) {
             const speechToText = event.results[0][0].transcript;
             inputQuestion.value = speechToText;
             triggerChatGPT(speechToText);
         };
     }
-    recognition.start();
+    synthesis.start();
 }
 
-function stopSpeechRecognition() {
-    if (recognition) {
-        recognition.stop();
+function stopSpeechSynthesis() {
+    if (synthesis) {
+        synthesis.stop();
     }
 }
 
-// Start speech recognition
-function startSpeechRecognition() {
-    recognition.start();
-    recognition.onresult = function(event) {
-        const speechToText = event.results[0][0].transcript;
-        inputQuestion.value = speechToText;
-        triggerChatGPT(speechToText);
-    };
-}
-
-// Stop speech recognition
-function stopSpeechRecognition() {
-    recognition.stop();
+// Stop speech synthesis
+function stopSpeechSynthesis() {
+    synthesis.stop();
 }
 
 // Event listener for send button
@@ -74,6 +64,7 @@ buttonSend.addEventListener('click', function() {
 
 // Function to trigger ChatGPT with user's input
 async function triggerChatGPT(userInput) {
+	stopAudio();
     clearConversation();
 
     const userTag = createUserTag();
@@ -187,5 +178,43 @@ function playBotResponse(responseText) {
 // Function to delete conversation when delete button is clicked
 deleteButton.addEventListener('click', function() {
 	stopAudio();
-    convArea.innerHTML = "";
+    clearConversation();
 });
+
+
+
+
+
+
+
+
+// Show welcome popup when the page is loaded
+document.addEventListener('DOMContentLoaded', function() {
+	document.getElementById('welcome-popup').style.display = 'block';
+});
+
+const authorizeButton = document.getElementById('authorize-button');
+const refuseButton = document.getElementById('refuse-button');
+
+authorizeButton.addEventListener('click', function() {
+	requestMicrophonePermission();
+    document.getElementById('welcome-popup').style.display = 'none';
+});
+
+refuseButton.addEventListener('click', function() {
+    document.getElementById('welcome-popup').style.display = 'none';
+});
+
+function requestMicrophonePermission() {
+    navigator.mediaDevices.getUserMedia({ audio: true })
+        .then(function(stream) {
+            console.log('Microphone access granted');
+            // Vous pouvez effectuer d'autres actions ici après avoir obtenu l'accès au microphone
+        })
+        .catch(function(error) {
+            console.error('Error accessing microphone:', error);
+
+            // Affichez un message à l'utilisateur pour l'informer que l'accès au microphone est nécessaire
+            // et les invite à vérifier les paramètres de leur navigateur.
+        });
+}
