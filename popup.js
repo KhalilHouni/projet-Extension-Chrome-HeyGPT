@@ -2,7 +2,7 @@ const buttonSend = document.getElementById('button-send');
 const inputQuestion = document.getElementById('user-question');
 const convArea = document.getElementById('conv');
 const deleteButton = document.getElementById('delete-button');
-const API_KEY = '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';
+const API_KEY = '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';
 const URL = 'https://api.openai.com/v1/completions';
 let synthesis;
 let isVoiceEnabled = true; // Set bot's voice to "off" by default
@@ -62,9 +62,8 @@ buttonSend.addEventListener('click', function() {
     }
 });
 
-// Function to trigger ChatGPT with user's input
+// Function to trigger ChatGPT with user's input and selected language
 async function triggerChatGPT(userInput) {
-	stopAudio();
     clearConversation();
 
     const userTag = createUserTag();
@@ -75,14 +74,17 @@ async function triggerChatGPT(userInput) {
     appendToConversation(userQuestion);
     appendToConversation(gptTag);
 
-    const gptAnswer = await askQuestion(userInput);
+    const language = document.getElementById('language-select').value; // Get the selected language
+
+    const gptAnswer = await askQuestion(userInput, language);
     appendToConversation(gptAnswer);
     if (isVoiceEnabled) {
-        playBotResponse(gptAnswer.textContent);
+        playBotResponse(gptAnswer.textContent, language); // Pass the selected language to the playBotResponse function
     }
     scrollToBottom();
 }
 
+////////////////////////////////////
 // Event listener for stop audio button
 document.getElementById('stop-audio').addEventListener('click', function() {
     stopAudio();
@@ -169,9 +171,22 @@ async function createAnswerGpt(response) {
     return answer;
 }
 
-// Function to play bot's response as speech
-function playBotResponse(responseText) {
+// Function to play bot's response as speech with the selected language
+function playBotResponse(responseText, language) {
+    const languageConfig = {
+        fr: 'fr-FR',
+        en: 'en-US',
+        es: 'es-ES',
+        zh: 'cmn-Hans-CN', // Mandarin
+        ar: 'ar-SA',      // Arabic
+        pt: 'pt-PT'       // Portuguese
+        // Add more languages and their corresponding SpeechSynthesisUtterance languages here
+    };
+
+    const selectedLanguage = languageConfig[language] || 'en-US'; // Default to English if language is not found
+
     const utterance = new SpeechSynthesisUtterance(responseText);
+    utterance.lang = selectedLanguage; // Set the language for the speech synthesis
     window.speechSynthesis.speak(utterance);
 }
 
@@ -180,9 +195,6 @@ deleteButton.addEventListener('click', function() {
 	stopAudio();
     clearConversation();
 });
-
-
-
 
 
 
