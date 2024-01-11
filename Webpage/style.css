@@ -1,0 +1,105 @@
+/* Global Style */
+
+* {
+	margin: 0;
+	font-family: 'Times New Roman', Times, serif;
+}
+
+.stick1, .stick2, .stick3 {
+	width: 100dvw;
+	height: 0.2dvh;
+	background-color: black;
+}
+
+p {
+	margin-bottom: 15px;
+	margin-left: 5px;
+}
+
+h4 {
+	margin-left: 5px;
+	margin-top: 5px
+}
+
+/* Up */
+
+.up {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+    width: 100dvw;
+    height: 9.8dvh;
+	box-shadow: inset 3px -3px 15px rgba(0, 0, 0, 0.5);
+	/* Add your background pattern here */
+	--s: 25px; /* control the size */
+	--c1: #093a8e;
+	--c2: #0642FC;
+	--c: #0000 71%, var(--c1) 0 79%, #0000 0;
+	--_s: calc(var(--s) / 2) / calc(2 * var(--s)) calc(2 * var(--s));
+	background: linear-gradient(45deg, var(--c)) calc(var(--s) / -2) var(--_s),
+	  linear-gradient(135deg, var(--c)) calc(var(--s) / 2) var(--_s),
+	  radial-gradient(var(--c1) 35%, var(--c2) 37%) 0 0 / var(--s) var(--s);
+}
+
+h1 {
+	font-family: 'Black Ops One';
+	margin-left: 10px;
+	font-size: 46px;
+	color: #80d2fb;
+}
+
+/* Mid */ 
+
+.mid {
+	width: 100dvw;
+	height: 80dvh;
+	box-shadow: inset 3px -3px 15px rgba(0, 0, 0, 0.5);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	--color: #a748f5;
+	background: linear-gradient(95deg, var(--color) 25%, transparent 25%) -50px 0,
+		  linear-gradient(-15deg, var(--color) 25%, transparent 25%) -50px 0,
+		  linear-gradient(25deg, transparent 75%, var(--color) 75%) -50px 0,
+		  linear-gradient(-45deg, transparent 75%, var(--color) 75%) -50px 0,
+		  linear-gradient(-15deg, transparent 75%, var(--color) 75%) -50px 0;
+	background-color: #b669fd;
+	background-size: 40px 40px;
+}
+
+
+.conv {
+    width: 85%;
+    height: 95%;
+	border-style: solid;
+	border-radius: 0.5rem;
+	border-width: 3px;
+	background-color: #857bf7;
+	border-color: #160e8f;
+}
+
+/* Lower */
+
+
+.lower {
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+    width: 100dvw;
+    height: 9.8dvh;
+	box-shadow: inset 3px -3px 15px rgba(0, 0, 0, 0.5);
+	/* Add your background pattern here */
+	--s: 25px; /* control the size */
+	--c1: #093a8e;
+	--c2: #0642FC;
+	--c: #0000 71%, var(--c1) 0 79%, #0000 0;
+	--_s: calc(var(--s) / 2) / calc(2 * var(--s)) calc(2 * var(--s));
+	background: linear-gradient(45deg, var(--c)) calc(var(--s) / -2) var(--_s),
+	  linear-gradient(135deg, var(--c)) calc(var(--s) / 2) var(--_s),
+	  radial-gradient(var(--c1) 35%, var(--c2) 37%) 0 0 / var(--s) var(--s);
+}
+
+
+.name {
+	font-size: 32px;
+}

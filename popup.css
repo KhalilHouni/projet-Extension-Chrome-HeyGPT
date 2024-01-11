@@ -6,6 +6,12 @@
 
 p {
 	margin-bottom: 10px;
+	margin-left: 5px;
+}
+
+h4 {
+	margin-left: 5px;
+	margin-top: 5px;
 }
 
 body {
@@ -27,15 +33,23 @@ body {
 	justify-content: center;
 	width: 380px;
 	height: 70px;
-	background-color: #0642FC;
 	box-shadow: inset 3px -3px 15px rgba(0, 0, 0, 0.5);
+	/* Add your background pattern here */
+	--s: 25px; /* control the size */
+	--c1: #093a8e;
+	--c2: #0642FC;
+	--c: #0000 71%, var(--c1) 0 79%, #0000 0;
+	--_s: calc(var(--s) / 2) / calc(2 * var(--s)) calc(2 * var(--s));
+	background: linear-gradient(45deg, var(--c)) calc(var(--s) / -2) var(--_s),
+	  linear-gradient(135deg, var(--c)) calc(var(--s) / 2) var(--_s),
+	  radial-gradient(var(--c1) 35%, var(--c2) 37%) 0 0 / var(--s) var(--s);
 }
 
 h1 {
-	font-family: 'Rubik Doodle Shadow';
+	font-family: 'Black Ops One';
 	margin-left: 10px;
 	font-size: 32px;
-	color: black;
+	color: #80d2fb;
 }
 
 
@@ -44,23 +58,35 @@ h1 {
 /* Mid Popup */
 
 .mid {
-	background-color: #786BFD ;
 	width: 100%;
 	height: 300px;
 	box-shadow: inset 3px -3px 15px rgba(0, 0, 0, 0.5);
 	display: flex;
 	align-items: center;
 	justify-content: center;
-}
+	--color: #a748f5;
+	background: linear-gradient(95deg, var(--color) 25%, transparent 25%) -50px 0,
+		  linear-gradient(-15deg, var(--color) 25%, transparent 25%) -50px 0,
+		  linear-gradient(25deg, transparent 75%, var(--color) 75%) -50px 0,
+		  linear-gradient(-45deg, transparent 75%, var(--color) 75%) -50px 0,
+		  linear-gradient(-15deg, transparent 75%, var(--color) 75%) -50px 0;
+	background-color: #b669fd;
+	background-size: 25px 25px;
+  }
 
 .conv {
-    width: 85%;
-    height: 95%;
-    overflow: scroll; /* Permet le défilement */
+    width: 90%;
+    height: 90%;
+    overflow: scroll;
+	border-style: solid;
+	border-radius: 0.5rem;
+	border-width: 2px;
+	background-color: #857bf7;
+	border-color: #160e8f;
 }
 
 .conv::-webkit-scrollbar {
-    width: 0; /* Masque la barre de défilement */
+    width: 0;
 }
 
 
@@ -75,11 +101,19 @@ select {
 .lower {
 	display: flex;
 	align-items: center;
-	justify-content: center;
+	justify-content: space-around;
     width: 380px;
     height: 70px;
-    background-color: #0642FC;
 	box-shadow: inset 3px -3px 15px rgba(0, 0, 0, 0.5);
+	/* Add your background pattern here */
+	--s: 25px; /* control the size */
+	--c1: #093a8e;
+	--c2: #0642FC;
+	--c: #0000 71%, var(--c1) 0 79%, #0000 0;
+	--_s: calc(var(--s) / 2) / calc(2 * var(--s)) calc(2 * var(--s));
+	background: linear-gradient(45deg, var(--c)) calc(var(--s) / -2) var(--_s),
+	  linear-gradient(135deg, var(--c)) calc(var(--s) / 2) var(--_s),
+	  radial-gradient(var(--c1) 35%, var(--c2) 37%) 0 0 / var(--s) var(--s);
 }
 
 .Message {
@@ -230,6 +264,10 @@ select {
 
 .tooltip1, .tooltip3 {
 	width: 22px
+}
+
+.tooltip2 {
+	width: 23px;
 }
 
 .tooltip1::before, .tooltip2::before, .tooltip3::before {
