@@ -9,11 +9,6 @@
     <meta charset="UTF-8">
 </head>
 <body>
-	<div class="welcome-popup" id="welcome-popup" style="display: none">
-		<h3>⚠️ Authorize the extension to access your microphone ⚠️</h3>
-		<button class="authorize-button" id="authorize-button"> Authorize </button>
-		<button class="refuse-button" id="refuse-button"> Refuse </button>
-	</div>
 		<div class="up">
 			<img src="/img/icon32.png" />
 			<h1>Hey GPT !</h1>
@@ -29,17 +24,16 @@
 
 		<div class="lower">
 
-			<!--menu deroulant pour les langues-->
+			<!--Side panel for languages-->
 			<select id="language-select">
-				<option value="en">En</option>
-				<option value="fr">Fr</option>
-				<option value="es">Sp</option>
-				<option value="zh">Mand</option>
-				<option value="ar">Ar</option>
-				<option value="pt">Pr</option>
-				
-			  </select>
-			  
+				<option value="en">English</option>
+				<option value="fr">French</option>
+				<option value="es">Spanish</option>
+				<option value="zh">Mandarin</option>
+				<option value="ar">Arab</option>
+				<option value="pt">Portuguese</option>
+			</select>
+
 			<div class="Message">
 				<input title="Write Message" tabindex="i" pattern="\d+" placeholder="Message.." class="MsgInput" type="text" id="user-question">
 				<svg xmlns="http://www.w3.org/2000/svg" version="1.0" width="30.000000pt" height="30.000000pt" viewBox="0 0 30.000000 30.000000" preserveAspectRatio="xMidYMid meet" class="SendSVG" id="button-send">

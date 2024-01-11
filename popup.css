@@ -19,56 +19,6 @@ body {
 	background-color: black;
 }
 
-.welcome-popup {
-	width: 250px;
-	height: 150px;
-	position: absolute;
-	background-color: grey;
-	top: 25%;
-	left: 17.5%;
-	border-color: red;
-	border-width: 3px;
-	border-style: solid;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-
-h3 {
-	text-align: center;
-	position: relative;
-	top: 7%
-}
-
-.authorize-button, .refuse-button {
-	font-family: inherit;
-	border: none;
-	outline: 1px dotted rgb(37, 37, 37);
-	outline-offset: -4px;
-	background: hsl(0deg 0% 75%);
-	box-shadow: inset -1px -1px #292929, inset 1px 1px #fff, inset -2px -2px rgb(158, 158, 158), inset 2px 2px #ffffff;
-	font-size: 12px;
-	text-transform: uppercase;
-	letter-spacing: 1.5px;
-	text-align: center;
-	padding: 5px 30px;
-	position: relative;
-}
-
-.authorize-button {
-	width: 150px;
-	top: 40%;
-	left: 20%
-}
-
-.refuse-button {
-	left: 27%
-}
-
-.authorize-button:active, .refuse-button:active {
-	box-shadow: inset -1px -1px #fff, inset 1px 1px #292929, inset -2px -2px #ffffff, inset 2px 2px rgb(158, 158, 158);
-}
-
 /* Upper Popup */
 
 .up {
@@ -117,6 +67,10 @@ h1 {
 
 
 /* Lower Popup */
+
+select {
+	margin-right: 5px;
+}
 
 .lower {
 	display: flex;
