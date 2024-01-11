@@ -237,35 +237,3 @@ deleteButton.addEventListener('click', function() {
 	stopAudio();
     clearConversation();
 });
-
-
-
-
-// Show welcome popup when the page is loaded
-document.addEventListener('DOMContentLoaded', function() {
-	document.getElementById('welcome-popup').style.display = 'block';
-});
-
-const authorizeButton = document.getElementById('authorize-button');
-const refuseButton = document.getElementById('refuse-button');
-
-authorizeButton.addEventListener('click', function() {
-	requestMicrophonePermission();
-    document.getElementById('welcome-popup').style.display = 'none';
-});
-
-refuseButton.addEventListener('click', function() {
-    document.getElementById('welcome-popup').style.display = 'none';
-});
-
-function requestMicrophonePermission() {
-    navigator.mediaDevices.getUserMedia({ audio: true })
-        .then(function(stream) {
-            console.log('Microphone access granted');
-            
-        })
-        .catch(function(error) {
-            console.error('Error accessing microphone:', error);
-
-        });
-}
