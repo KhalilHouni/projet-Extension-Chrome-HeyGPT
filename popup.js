@@ -1,8 +1,9 @@
+
 const buttonSend = document.getElementById('button-send');
 const inputQuestion = document.getElementById('user-question');
 const convArea = document.getElementById('conv');
 const deleteButton = document.getElementById('delete-button');
-const API_KEY = 'API_KEY';
+const API_KEY = 'ApiKey go here';
 const URL = 'https://api.openai.com/v1/completions';
 let synthesis;
 let isVoiceEnabled = true; // Set bot's voice to "off" by default
@@ -54,13 +55,54 @@ function stopSpeechSynthesis() {
     synthesis.stop();
 }
 
+
 // Event listener for send button
 buttonSend.addEventListener('click', function() {
     const userQuestion = inputQuestion.value;
     if (userQuestion) {
-        triggerChatGPT(userQuestion);
+        if (shouldPerformGoogleSearch(userQuestion)) {
+            // Respond with "looking on the browser..."
+            const lookingMessage = createLookingMessage();
+            appendToConversation(lookingMessage);
+
+            // Disable ChatGPT
+            stopSpeechSynthesis();
+
+            // Perform the Google search
+            performGoogleSearch(userQuestion);
+        } else {
+            // If the user's input does not contain "google", proceed with the ChatGPT interaction as before
+            triggerChatGPT(userQuestion);
+        }
     }
 });
+
+
+
+// Function to check if the user wants to perform a Google search
+function shouldPerformGoogleSearch(userQuestion) {
+    return userQuestion.toLowerCase().includes('search on google');
+}
+
+// Function to create "looking on the browser..." message
+function createLookingMessage() {
+    const lookingMessage = document.createElement('p');
+    lookingMessage.textContent = "Looking on the browser...";
+    return lookingMessage;
+}
+
+// Function to stop speech synthesis
+function stopSpeechSynthesis() {
+    if (synthesis) {
+        synthesis.stop();
+    }
+}
+
+// Function to perform the Google search
+function performGoogleSearch(query) {
+    chrome.runtime.sendMessage({ action: 'performGoogleSearch', query: query });
+}
+
 
 // Function to trigger ChatGPT with user's input and selected language
 async function triggerChatGPT(userInput) {
@@ -180,7 +222,7 @@ function playBotResponse(responseText, language) {
         zh: 'cmn-Hans-CN', // Mandarin
         ar: 'ar-SA',      // Arabic
         pt: 'pt-PT'       // Portuguese
-        // Add more languages and their corresponding SpeechSynthesisUtterance languages here
+      // more languages can be added here
     };
 
     const selectedLanguage = languageConfig[language] || 'en-US'; // Default to English if language is not found
@@ -196,3 +238,34 @@ deleteButton.addEventListener('click', function() {
     clearConversation();
 });
 
+
+
+
+// Show welcome popup when the page is loaded
+document.addEventListener('DOMContentLoaded', function() {
+	document.getElementById('welcome-popup').style.display = 'block';
+});
+
+const authorizeButton = document.getElementById('authorize-button');
+const refuseButton = document.getElementById('refuse-button');
+
+authorizeButton.addEventListener('click', function() {
+	requestMicrophonePermission();
+    document.getElementById('welcome-popup').style.display = 'none';
+});
+
+refuseButton.addEventListener('click', function() {
+    document.getElementById('welcome-popup').style.display = 'none';
+});
+
+function requestMicrophonePermission() {
+    navigator.mediaDevices.getUserMedia({ audio: true })
+        .then(function(stream) {
+            console.log('Microphone access granted');
+            
+        })
+        .catch(function(error) {
+            console.error('Error accessing microphone:', error);
+
+        });
+}
