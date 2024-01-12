@@ -2,18 +2,19 @@
 
 * {
 	margin: 0;
-	font-family: 'Times New Roman', Times, serif;
+	font-family: 'Concert One';
 }
 
 .stick1, .stick2, .stick3 {
 	width: 100dvw;
 	height: 0.2dvh;
-	background-color: black;
+	background-color: rgb(255, 255, 255);
 }
 
 p {
 	margin-bottom: 15px;
 	margin-left: 5px;
+	color: #cdcdcd;
 }
 
 h4 {
@@ -32,8 +33,8 @@ h4 {
 	box-shadow: inset 3px -3px 15px rgba(0, 0, 0, 0.5);
 	/* Add your background pattern here */
 	--s: 25px; /* control the size */
-	--c1: #093a8e;
-	--c2: #0642FC;
+	--c1: #4b4b4b;
+	--c2: #000000;
 	--c: #0000 71%, var(--c1) 0 79%, #0000 0;
 	--_s: calc(var(--s) / 2) / calc(2 * var(--s)) calc(2 * var(--s));
 	background: linear-gradient(45deg, var(--c)) calc(var(--s) / -2) var(--_s),
@@ -45,7 +46,7 @@ h1 {
 	font-family: 'Black Ops One';
 	margin-left: 10px;
 	font-size: 46px;
-	color: #80d2fb;
+	color: #afb1b1;
 }
 
 /* Mid */ 
@@ -57,14 +58,7 @@ h1 {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	--color: #a748f5;
-	background: linear-gradient(95deg, var(--color) 25%, transparent 25%) -50px 0,
-		  linear-gradient(-15deg, var(--color) 25%, transparent 25%) -50px 0,
-		  linear-gradient(25deg, transparent 75%, var(--color) 75%) -50px 0,
-		  linear-gradient(-45deg, transparent 75%, var(--color) 75%) -50px 0,
-		  linear-gradient(-15deg, transparent 75%, var(--color) 75%) -50px 0;
-	background-color: #b669fd;
-	background-size: 40px 40px;
+	background-color: #343536;
 }
 
 
@@ -74,8 +68,8 @@ h1 {
 	border-style: solid;
 	border-radius: 0.5rem;
 	border-width: 3px;
-	background-color: #857bf7;
-	border-color: #160e8f;
+	background-color: #737477;
+	border-color: #000000;
 }
 
 /* Lower */
@@ -90,8 +84,8 @@ h1 {
 	box-shadow: inset 3px -3px 15px rgba(0, 0, 0, 0.5);
 	/* Add your background pattern here */
 	--s: 25px; /* control the size */
-	--c1: #093a8e;
-	--c2: #0642FC;
+	--c1: #4b4b4b;
+	--c2: #000000;
 	--c: #0000 71%, var(--c1) 0 79%, #0000 0;
 	--_s: calc(var(--s) / 2) / calc(2 * var(--s)) calc(2 * var(--s));
 	background: linear-gradient(45deg, var(--c)) calc(var(--s) / -2) var(--_s),
