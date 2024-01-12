@@ -3,7 +3,7 @@ const buttonSend = document.getElementById('button-send');
 const inputQuestion = document.getElementById('user-question');
 const convArea = document.getElementById('conv');
 const deleteButton = document.getElementById('delete-button');
-const API_KEY = 'ApiKey go here';
+const API_KEY = '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';
 const URL = 'https://api.openai.com/v1/completions';
 let synthesis;
 let isVoiceEnabled = true; // Set bot's voice to "off" by default
@@ -55,34 +55,46 @@ function stopSpeechSynthesis() {
     synthesis.stop();
 }
 
-
 // Event listener for send button
 buttonSend.addEventListener('click', function() {
     const userQuestion = inputQuestion.value;
     if (userQuestion) {
         if (shouldPerformGoogleSearch(userQuestion)) {
-            // Respond with "looking on the browser..."
-            const lookingMessage = createLookingMessage();
-            appendToConversation(lookingMessage);
-
-            // Disable ChatGPT
-            stopSpeechSynthesis();
-
-            // Perform the Google search
-            performGoogleSearch(userQuestion);
+            if (shouldPerformGoogleImagesSearch(userQuestion)) {
+                const lookingMessage = createLookingMessage();
+                appendToConversation(lookingMessage);
+                stopSpeechSynthesis();
+                performGoogleImagesSearch(userQuestion);
+            } else {
+                const lookingMessage = createLookingMessage();
+                appendToConversation(lookingMessage);
+                stopSpeechSynthesis();
+                performGoogleSearch(userQuestion);
+            }
         } else {
-            // If the user's input does not contain "google", proceed with the ChatGPT interaction as before
             triggerChatGPT(userQuestion);
         }
     }
 });
 
-
-
 // Function to check if the user wants to perform a Google search
 function shouldPerformGoogleSearch(userQuestion) {
-    return userQuestion.toLowerCase().includes('search on google');
+    return userQuestion.toLowerCase().includes('search on google') && !shouldPerformGoogleImagesSearch(userQuestion);
 }
+
+// Function to check if the user wants to perform a Google Images search
+function shouldPerformGoogleImagesSearch(userQuestion) {
+    return userQuestion.toLowerCase().includes('search on google pictures of');
+}
+
+// Function to perform the Google Images search with the actual query
+function performGoogleImagesSearch(query) {
+    const searchKeyword = 'search on google pictures of';
+    const searchQuery = query.substring(searchKeyword.length).trim(); // Extract the actual query part after "search on google pictures of"
+    stopSpeechSynthesis(); // Stop the bot response
+    chrome.runtime.sendMessage({ action: 'performGoogleImagesSearch', query: searchQuery });
+}
+
 
 // Function to create "looking on the browser..." message
 function createLookingMessage() {
@@ -91,6 +103,13 @@ function createLookingMessage() {
     return lookingMessage;
 }
 
+// Function to perform the Google search with the actual query
+function performGoogleSearch(query) {
+    chrome.runtime.sendMessage({ action: 'performGoogleSearch', query: query });
+}
+
+
+
 // Function to stop speech synthesis
 function stopSpeechSynthesis() {
     if (synthesis) {
@@ -98,10 +117,6 @@ function stopSpeechSynthesis() {
     }
 }
 
-// Function to perform the Google search
-function performGoogleSearch(query) {
-    chrome.runtime.sendMessage({ action: 'performGoogleSearch', query: query });
-}
 
 
 // Function to trigger ChatGPT with user's input and selected language
@@ -237,3 +252,22 @@ deleteButton.addEventListener('click', function() {
 	stopAudio();
     clearConversation();
 });
+
+// Function to trigger Google search query using fully-formed http URL
+function googleForAnswers(url) {
+    const functionCall = {
+        name: "google_for_answers",
+        arguments: {
+            url: url
+        }
+    };
+
+    const message = {
+        role: "assistant",
+        content: null,
+        function_call: functionCall
+    };
+
+    // Send the message to the assistant for Google search
+    // (you can use your specific way of sending message to the assistant here)
+}
