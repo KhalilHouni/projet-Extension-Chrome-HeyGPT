@@ -92,7 +92,43 @@ h1 {
 select {
 	margin-right: 5px;
 }
-
+#language-select {
+	width: 90px; 
+	padding: 8px;
+	font-size: 13px;
+	border-style: solid;
+	border-radius: 0.5rem;
+	border-width: 2px;
+	background-color: black;
+	color: white;
+	outline: none;
+	cursor: pointer;
+  }
+  
+  #language-select:hover {
+	border-color: #888;
+  }
+  
+  #language-select:focus {
+	border-color: #a748f5;
+  }
+  
+  
+  #language-select option {
+	font-size: 12px;
+  }
+  
+  /* Style lorsque l'option est survolée */
+  #language-select option:hover {
+	background-color: #f5f5f5;
+  }
+  
+  /* Style lorsque l'option est sélectionnée */
+  #language-select option:checked {
+	background-color: #a748f5;
+	color: #fff;
+  }
+ 
 .lower {
 	display: flex;
 	align-items: center;
