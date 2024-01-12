@@ -5,6 +5,8 @@ const convArea = document.getElementById('conv');
 const deleteButton = document.getElementById('delete-button');
 const API_KEY = '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';
 const URL = 'https://api.openai.com/v1/completions';
+const weatherApiKey = "23e05a7ea147f7645052bf0de2fd3fa3";
+const weatherApiUrl = "https://api.openweathermap.org/data/2.5/weather?&units=metric&q=";
 let synthesis;
 let isVoiceEnabled = true; // Set bot's voice to "off" by default
 
@@ -60,19 +62,23 @@ buttonSend.addEventListener('click', function() {
     const userQuestion = inputQuestion.value;
     if (userQuestion) {
         if (shouldPerformGoogleSearch(userQuestion)) {
-            if (shouldPerformGoogleImagesSearch(userQuestion)) {
-                const lookingMessage = createLookingMessage();
-                appendToConversation(lookingMessage);
-                stopSpeechSynthesis();
-                performGoogleImagesSearch(userQuestion);
-            } else {
-                const lookingMessage = createLookingMessage();
-                appendToConversation(lookingMessage);
-                stopSpeechSynthesis();
-                performGoogleSearch(userQuestion);
-            }
+            // Respond with "looking on the browser..."
+            const lookingMessage = createLookingMessage();
+            appendToConversation(lookingMessage);
+
+            // Disable ChatGPT
+            stopSpeechSynthesis();
+
+            // Perform the Google search
+            performGoogleSearch(userQuestion);
         } else {
-            triggerChatGPT(userQuestion);
+            // If the user's input does not contain "google", proceed with the ChatGPT interaction as before
+           if (userQuestion.includes("weather")) {
+            const location = userQuestion.replace("weather","").trim();
+            getWeatherInfo(location);
+            ;
+           } else { 
+           return ("error");}
         }
     }
 });
@@ -252,6 +258,25 @@ deleteButton.addEventListener('click', function() {
 	stopAudio();
     clearConversation();
 });
+
+function getWeatherInfo(location) {
+    fetch(`${weatherApiUrl}${location}&appid=${weatherApiKey}`)
+        .then(response => response.json())
+        .then(data => {
+            const weatherDescription = data.weather[0].description;
+            const temperature = data.main.temp;
+            const weatherInfo = `Weather in ${location}: ${weatherDescription}, Temperature: ${temperature}°C`;
+            console.log(weatherInfo);
+            const answerWeather = document.createElement('p');
+            answerWeather.textContent = weatherInfo;
+            convArea.appendChild(answerWeather);
+            //appendToConversation(weatherInfo);
+        })
+        .catch(error => {
+            console.error('Error fetching weather data:', error);
+            //appendToConversation('Sorry, an error occurred while fetching weather information.');
+        });
+}
 
 // Function to trigger Google search query using fully-formed http URL
 function googleForAnswers(url) {
