@@ -1,8 +1,10 @@
-
 const buttonSend = document.getElementById('button-send');
 const inputQuestion = document.getElementById('user-question');
 const convArea = document.getElementById('conv');
+const voiceControlCheckbox = document.getElementById('voice-control-checkbox');
 const deleteButton = document.getElementById('delete-button');
+const micCheckbox = document.getElementById('mic-checkbox');
+const micSwitch = document.getElementById('switch');
 const API_KEY = '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';
 const URL = 'https://api.openai.com/v1/completions';
 const weatherApiKey = "23e05a7ea147f7645052bf0de2fd3fa3";
@@ -10,7 +12,31 @@ const weatherApiUrl = "https://api.openweathermap.org/data/2.5/weather?&units=me
 let synthesis;
 let isVoiceEnabled = true; // Set bot's voice to "off" by default
 
-const voiceControlCheckbox = document.getElementById('voice-control-checkbox');
+
+// When the mic checkbox is check scale it
+micCheckbox.addEventListener('change', function() {
+    if (this.checked) {
+		micSwitch.style.backgroundColor = "red";
+		micSwitch.style.transform = "scale(1.2)";
+    } else {
+		micSwitch.style.backgroundColor = "black";
+		micSwitch.style.transform = 'scale(1)';
+    }
+});
+
+document.getElementById("test").addEventListener("click", function() {
+	chrome.permissions.request({
+        permissions: ['audioCapture']
+    }, function(granted) {
+        if (granted) {
+            console.log("Permission granted for audioCapture");
+        } else {
+            console.log("Permission denied for audioCapture");
+        }
+    });
+});
+
+
 
 // When the page is loaded print welcome message
 document.addEventListener('DOMContentLoaded', function() {
@@ -296,3 +322,5 @@ function googleForAnswers(url) {
     // Send the message to the assistant for Google search
     // (you can use your specific way of sending message to the assistant here)
 }
+
+

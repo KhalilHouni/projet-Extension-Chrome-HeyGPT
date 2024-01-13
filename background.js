@@ -1,7 +1,5 @@
 //asking gpt to look up queries on google web browser
-
-
-// Listen for messages from the popup script
+// Listen for messages from the popup script to do google images search
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.action === 'performGoogleImagesSearch') {
         const query = request.query;
@@ -10,7 +8,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     }
 });
 
-// Listen for messages from the popup script
+// Listen for messages from the popup script to do google search
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.action === 'performGoogleSearch') {
         const query = request.query;
@@ -19,5 +17,19 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         chrome.tabs.create({ url: `https://www.google.com/search?q=${encodeURIComponent(modifiedQuery)}` });
     }
 });
+
+
+
+
+chrome.runtime.onInstalled.addListener(function(details) {
+    console.log("onInstalled event triggered", details);
+    if (details.reason === "install") {
+        chrome.tabs.create({
+            url: chrome.runtime.getURL("/Webpage/index.html")
+        });
+    }
+});
+
+
 
 

@@ -92,6 +92,7 @@ h1 {
 select {
 	margin-right: 5px;
 }
+
 #language-select {
 	width: 90px; 
 	padding: 8px;
@@ -103,32 +104,31 @@ select {
 	color: white;
 	outline: none;
 	cursor: pointer;
-  }
-  
-  #language-select:hover {
+}
+
+#language-select:hover {
 	border-color: #888;
-  }
-  
-  #language-select:focus {
+}
+
+#language-select:focus {
 	border-color: #a748f5;
-  }
-  
-  
-  #language-select option {
+}
+
+#language-select option {
 	font-size: 12px;
-  }
-  
-  /* Style lorsque l'option est survolée */
-  #language-select option:hover {
+}
+
+/* Style lorsque l'option est survolée */
+#language-select option:hover {
 	background-color: #f5f5f5;
-  }
-  
-  /* Style lorsque l'option est sélectionnée */
-  #language-select option:checked {
+}
+
+/* Style lorsque l'option est sélectionnée */
+#language-select option:checked {
 	background-color: #a748f5;
 	color: #fff;
-  }
- 
+}
+
 .lower {
 	display: flex;
 	align-items: center;
@@ -199,7 +199,7 @@ select {
 	width: 40px;
 	height: 40px;
 	display: flex;
-	margin-left: 15px;
+	margin-right: 5px;
 	justify-content: center;
 	align-items: center;
 	background-color: black;
@@ -223,11 +223,11 @@ select {
 	background-color: rgba(60,64,67, 0.8);
 }
 
-#checkbox {
+#mic-checkbox {
 	display: none;
 }
 
-#checkbox:checked + .switch {
+#mic-checkbox:checked + .switch {
 	opacity: 1;
 }
 
