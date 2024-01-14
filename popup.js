@@ -5,7 +5,7 @@ const voiceControlCheckbox = document.getElementById('voice-control-checkbox');
 const deleteButton = document.getElementById('delete-button');
 const micCheckbox = document.getElementById('mic-checkbox');
 const micSwitch = document.getElementById('switch');
-const API_KEY = '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';
+const API_KEY = 'APIKEY';
 const URL = 'https://api.openai.com/v1/completions';
 const weatherApiKey = "23e05a7ea147f7645052bf0de2fd3fa3";
 const weatherApiUrl = "https://api.openweathermap.org/data/2.5/weather?&units=metric&q=";
