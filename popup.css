@@ -302,7 +302,7 @@ select {
 }
 
 .tooltip2 {
-	width: 30px;
+	width: 35px;
 }
 
 .tooltip1::before, .tooltip2::before, .tooltip3::before {

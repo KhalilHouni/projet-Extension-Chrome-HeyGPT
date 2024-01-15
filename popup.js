@@ -75,7 +75,14 @@ voiceControlCheckbox.addEventListener('change', function() {
     }
 });
 
-
+// Function to press the button send with the key enter
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        const clickEvent = new Event('click');
+        buttonSend.dispatchEvent(clickEvent);
+    }
+});
 
 
 // -------- Speech Synthesis Functions -------- //
