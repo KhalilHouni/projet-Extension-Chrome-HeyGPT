@@ -5,7 +5,7 @@ const voiceControlCheckbox = document.getElementById('voice-control-checkbox');
 const deleteButton = document.getElementById('delete-button');
 const micCheckbox = document.getElementById('mic-checkbox');
 const micSwitch = document.getElementById('switch');
-const GPT_API_KEY = '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';
+const GPT_API_KEY = '';
 const URL = 'https://api.openai.com/v1/completions';
 const weatherApiKey = "23e05a7ea147f7645052bf0de2fd3fa3";
 const weatherApiUrl = "https://api.openweathermap.org/data/2.5/weather?&units=metric&q=";
@@ -96,7 +96,8 @@ function stopSpeechSynthesis() {
 // ---------- Talk To The Bot Functions ---------- //
 
 // Event listener for send button
-buttonSend.addEventListener('click', function() {
+buttonSend.addEventListener('click', async function() {
+	clearConversation();
     const userQuestion = inputQuestion.value;
     if (userQuestion) {
         if (shouldPerformGoogleSearch(userQuestion)) {
@@ -121,7 +122,11 @@ buttonSend.addEventListener('click', function() {
             performGoogleImagesSearch(userQuestion);
 		} else if (userQuestion.includes("weather")) {
             const location = userQuestion.replace("weather", "").trim();
-        	getWeatherInfo(location);
+        	const weatherData = await getWeatherInfo(location);
+			const weatherMessage = createWeatherAnswer(weatherData);
+			const gptTag = createGptTag();
+			appendToConversation(gptTag);
+			appendToConversation(weatherMessage);
         } else { 
         	triggerChatGPT(userQuestion);
 		}
@@ -178,17 +183,15 @@ function createErrorMessage() {
 
 /// --------------- WeatherApi Functions --------------- ///
 
-function getWeatherInfo(location) {
-    fetch(`${weatherApiUrl}${location}&appid=${weatherApiKey}`)
+async function getWeatherInfo(location) {
+    return await fetch(`${weatherApiUrl}${location}&appid=${weatherApiKey}`)
         .then(response => response.json())
         .then(data => {
             const weatherDescription = data.weather[0].description;
             const temperature = data.main.temp;
-            const weatherInfo = `Weather in ${location}: ${weatherDescription}, Temperature: ${temperature}°C`;
-            console.log(weatherInfo);
-            const answerWeather = document.createElement('p');
-            answerWeather.textContent = weatherInfo;
-            convArea.appendChild(answerWeather);
+        	const weatherInfo = `Weather in ${location}: ${weatherDescription}, Temperature: ${temperature}°C`;
+			console.log(weatherInfo);
+			return weatherInfo;
         })
         .catch(error => {
             console.error('Error fetching weather data:', error);
@@ -196,7 +199,11 @@ function getWeatherInfo(location) {
 }
 
 
-
+function createWeatherAnswer(weatherData) {
+	const answerWeather = document.createElement('p');
+	answerWeather.textContent = weatherData;
+	return answerWeather;
+}
 
 
 /// --------------- ChatGPT Functions --------------- ///
