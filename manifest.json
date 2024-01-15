@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "Hey GPT",
+  "version": "0.0",
+  "description": "Talk with Chat GPT",
+  "permissions": ["audioCapture", 
+  				"storage", 
+				"activeTab", 
+				"audio", 
+				"search", 
+				"ttsEngine", 
+				"tts", 
+				"https://api.openai.com/*", 
+				"tabs"], 
+  "icons": {
+    "16": "img/icon16.png",
+    "32": "img/icon32.png",
+    "48": "img/icon48.png",
+    "128": "img/icon128.png"
+  },
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
+}
