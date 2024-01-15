@@ -12,6 +12,8 @@ const weatherApiKey = "23e05a7ea147f7645052bf0de2fd3fa3";
 const weatherApiUrl = "https://api.openweathermap.org/data/2.5/weather?&units=metric&q=";
 var synthesis;
 var recognition;
+var microphone;
+var audioContext;
 var isVoiceEnabled = true; // Set bot's voice to "off" by default
 
 // ------ On load actions ------ //
@@ -20,7 +22,7 @@ var isVoiceEnabled = true; // Set bot's voice to "off" by default
 // When the page is loaded print welcome message
 document.addEventListener('DOMContentLoaded', function() {
     var welcome = document.createElement('p');
-	welcome.textContent = "Welcome, I am Hey GPT. Ask me any question, either orally or textually using the dedicated buttons below. I will provide the best possible answer. I was made with ❤️ by Khalil, Maud, and Rémy.";
+	welcome.textContent = "Welcome, I am Hey GPT. Ask me any question, either orally or textually using the dedicated buttons below. I will provide the best possible answer. I will by default answer you with speech synthesis, you can disable that below with mute button, moreover you can choose the language of your choice for speech synthesis with the languages menu. I can tell yout the actual weather in any city in the world (use : \'weather\' + city name). Also, I can do Google search with : \'search on google\' + your search, or \'search on google pictures of\' + your search, for images search. I was made with ❤️ by Khalil, Maud, and Rémy.";
 	var gptTag = createGptTag();
 	convArea.appendChild(gptTag);
 	convArea.appendChild(welcome);
@@ -324,9 +326,9 @@ async function createAnswerGpt(response) {
 async function setupMicrophone() {
 	return await navigator.mediaDevices.getUserMedia({ audio: true })
 	  .then((stream) => {
-		const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-		const microphone = audioContext.createMediaStreamSource(stream);
 
+		audioContext = new (window.AudioContext || window.webkitAudioContext)();
+		microphone = audioContext.createMediaStreamSource(stream);
 		recognition = new webkitSpeechRecognition();
 
         if (!recognition) {
@@ -343,16 +345,14 @@ async function setupMicrophone() {
 
 // When the mic checkbox is press scale it
 micCheckbox.addEventListener('click', async function() {
-	const recognition = await setupMicrophone();
-	console.log(recognition);
-
 	if (micCheckbox.checked) {
+		const recognition = await setupMicrophone();
 		console.log('Mic is on');
 		recognition.start();
 		toggleMicOn();
 	} else {
 		console.log('Mic is off');
-		recognition.stop();
+		stopMicrophone();
 		toggleMicOff();
 	}
 
@@ -376,4 +376,17 @@ function toggleMicOff() {
 		micSwitch.style.backgroundColor = "black";
 		micOn.style.transform ='scale(1)';
 	}, 300);
+}
+
+
+function stopMicrophone() {
+    if (recognition) {
+        recognition.stop();
+    }
+    if (microphone && microphone.mediaStream) {
+        microphone.mediaStream.getTracks()[0].stop();
+    }
+    if (audioContext) {
+        audioContext.close();
+    }
 }

@@ -9,7 +9,7 @@ p {
 	margin-bottom: 10px;
 	margin-right: 5px;
 	margin-left: 5px;
-	color: #cdcdcd;
+	color: #747474;
 	font-size: 15px;
 }
 
@@ -27,7 +27,7 @@ body {
 .stick1, .stick2, .stick3 {
 	width: 100%;
 	height: 0.3%;
-	background-color: rgb(255, 255, 255);
+	background-color: #877C70;
 }
 
 /* Upper Popup */
@@ -39,22 +39,14 @@ body {
 	width: 380px;
 	height: 70px;
 	box-shadow: inset 3px -3px 15px rgba(0, 0, 0, 0.5);
-	/* Add your background pattern here */
-	--s: 25px; /* control the size */
-	--c1: #4b4b4b;
-	--c2: #000000;
-	--c: #0000 71%, var(--c1) 0 79%, #0000 0;
-	--_s: calc(var(--s) / 2) / calc(2 * var(--s)) calc(2 * var(--s));
-	background: linear-gradient(45deg, var(--c)) calc(var(--s) / -2) var(--_s),
-	  linear-gradient(135deg, var(--c)) calc(var(--s) / 2) var(--_s),
-	  radial-gradient(var(--c1) 35%, var(--c2) 37%) 0 0 / var(--s) var(--s);
+	background-color: #5C131D;
 }
 
 h1 {
 	font-family: 'Black Ops One';
 	margin-left: 10px;
 	font-size: 32px;
-	color: #afb1b1;
+	color: #C6AF87;
 }
 
 
@@ -69,7 +61,7 @@ h1 {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background-color: #343536;
+	background-color: #C6AF87;
 }
 
 .conv {
@@ -79,7 +71,7 @@ h1 {
 	border-style: solid;
 	border-radius: 0.5rem;
 	border-width: 2px;
-	background-color: #737477;
+	background-color: #CFCCCC;
 	border-color: #000000;
 }
 
@@ -114,7 +106,7 @@ select {
 }
 
 #language-select:focus {
-	border-color: #a748f5;
+	border-color: #C6AF87;
 }
 
 #language-select option {
@@ -123,12 +115,12 @@ select {
 
 /* Style lorsque l'option est survolée */
 #language-select option:hover {
-	background-color: #f5f5f5;
+	background-color: #C6AF87;
 }
 
 /* Style lorsque l'option est sélectionnée */
 #language-select option:checked {
-	background-color: #a748f5;
+	background-color: #C6AF87;
 	color: #fff;
 }
 
@@ -139,15 +131,7 @@ select {
     width: 380px;
     height: 70px;
 	box-shadow: inset 3px -3px 15px rgba(0, 0, 0, 0.5);
-	/* Add your background pattern here */
-	--s: 25px; /* control the size */
-	--c1: #4b4b4b;
-	--c2: #000000;
-	--c: #0000 71%, var(--c1) 0 79%, #0000 0;
-	--_s: calc(var(--s) / 2) / calc(2 * var(--s)) calc(2 * var(--s));
-	background: linear-gradient(45deg, var(--c)) calc(var(--s) / -2) var(--_s),
-	  linear-gradient(135deg, var(--c)) calc(var(--s) / 2) var(--_s),
-	  radial-gradient(var(--c1) 35%, var(--c2) 37%) 0 0 / var(--s) var(--s);
+	background-color: #5C131D;
 }
 
 .Message {
