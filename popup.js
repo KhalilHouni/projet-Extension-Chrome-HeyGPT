@@ -26,20 +26,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // When the mic checkbox is check scale it
 micSwitch.addEventListener('click', async function() {
-	await toggleMic();
-	chrome.tabs.create({
-		url: chrome.runtime.getURL("/Webpage/index.html")
-	});
+	toggleMic( () => {
+		chrome.tabs.create({
+			url: chrome.runtime.getURL("/Webpage/index.html")
+		});
+	})
 });
 
 // Mic button style change on click
-async function toggleMic() {
+function toggleMic(callback) {
 	micSwitch.style.backgroundColor = "red";
 	micOn.style.transform = "scale(1.3)";
 	setTimeout(function() {
 		micSwitch.style.backgroundColor = "black";
         micOn.style.transform ='scale(1)';
-	}, 500);
+		callback();
+	}, 700);
 }
 
 // Function to delete conversation when delete button is clicked

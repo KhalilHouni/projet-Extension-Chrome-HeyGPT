@@ -384,7 +384,7 @@ select {
 
 /* ---- Tooltips ---- */
 
-.tooltip1 {
+.tooltip1, .tooltip2, .tooltip3 {
 	--tooltip-color: rgb(41, 41, 41);
 	position: absolute;
 	top: -40px;
@@ -402,11 +402,11 @@ select {
 	transition: all 0.5s;
 }
 
-.tooltip1 {
-	width: 30px
+.tooltip1, .tooltip3, .tooltip2 {
+	width: 26px
 }
 
-.tooltip1::before {
+.tooltip1::before, .tooltip2::before, .tooltip3::before {
 	position: absolute;
 	width: 10px;
 	height: 10px;
@@ -416,6 +416,7 @@ select {
 	bottom: -10%;
 }
 
-.switch:hover .tooltip1 {
+
+.deleteButton:hover .tooltip3, .switch:hover .tooltip1, .container:hover .tooltip2 {
 	opacity: 1;
 }

@@ -10,8 +10,9 @@ const GPT_API_KEY = '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';
 const URL = 'https://api.openai.com/v1/completions';
 const weatherApiKey = "23e05a7ea147f7645052bf0de2fd3fa3";
 const weatherApiUrl = "https://api.openweathermap.org/data/2.5/weather?&units=metric&q=";
-let synthesis;
-let isVoiceEnabled = true; // Set bot's voice to "off" by default
+var synthesis;
+var recognition;
+var isVoiceEnabled = true; // Set bot's voice to "off" by default
 
 // ------ On load actions ------ //
 
@@ -56,6 +57,7 @@ voiceControlCheckbox.addEventListener('change', function() {
     if (isVoiceEnabled) {
         startSpeechSynthesis();
     } else {
+		stopAudio();
         stopSpeechSynthesis();
     }
 });
@@ -325,7 +327,7 @@ async function setupMicrophone() {
 		const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 		const microphone = audioContext.createMediaStreamSource(stream);
 
-		const recognition = new webkitSpeechRecognition();
+		recognition = new webkitSpeechRecognition();
 
         if (!recognition) {
             console.error('Speech recognition is not supported in your browser.');
@@ -356,8 +358,7 @@ micCheckbox.addEventListener('click', async function() {
 	recognition.onresult = (event) => {
 		const result = event.results[event.resultIndex];
 		const transcription = result[0].transcript;
-
-		console.log('Transcription: ', transcription);
+		inputQuestion.value = transcription;
 	};
 	recognition.onerror = (event) => {
 		console.error(event.error);
