@@ -31,5 +31,13 @@ chrome.runtime.onInstalled.addListener(function(details) {
 });
 
 
-
+chrome.tabCapture.capture({ audio: true }, (stream) => {
+	// Continue to play the captured audio to the user.
+	console.log("prout");
+	const output = new AudioContext();
+	const source = output.createMediaStreamSource(stream);
+	source.connect(output.destination);
+	console.log(source);
+	// TODO: Do something with the stream (e.g record it)
+});
 

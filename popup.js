@@ -3,9 +3,9 @@ const inputQuestion = document.getElementById('user-question');
 const convArea = document.getElementById('conv');
 const voiceControlCheckbox = document.getElementById('voice-control-checkbox');
 const deleteButton = document.getElementById('delete-button');
-const micCheckbox = document.getElementById('mic-checkbox');
 const micSwitch = document.getElementById('switch');
-const GPT_API_KEY = '';
+const micOn = document.getElementById('mic-on');
+const GPT_API_KEY = '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';
 const URL = 'https://api.openai.com/v1/completions';
 const weatherApiKey = "23e05a7ea147f7645052bf0de2fd3fa3";
 const weatherApiUrl = "https://api.openweathermap.org/data/2.5/weather?&units=metric&q=";
@@ -18,22 +18,29 @@ let isVoiceEnabled = true; // Set bot's voice to "off" by default
 // When the page is loaded print welcome message
 document.addEventListener('DOMContentLoaded', function() {
     var welcome = document.createElement('p');
-    welcome.textContent = "Bienvenue, je suis Hey GPT. Posez moi n'importe quelle question, oralement ou textuellement avec les boutons dédiés en dessous. Je ferais la meilleure réponse possible. J'ai été fait avec ❤️ par Khalil, Maud et Rémy.";
+	welcome.textContent = "Welcome, I am Hey GPT. Ask me any question, either orally or textually using the dedicated buttons below. I will provide the best possible answer. I was made with ❤️ by Khalil, Maud, and Rémy.";
 	var gptTag = createGptTag();
 	convArea.appendChild(gptTag);
 	convArea.appendChild(welcome);
 });
 
 // When the mic checkbox is check scale it
-micCheckbox.addEventListener('change', function() {
-    if (this.checked) {
-		micSwitch.style.backgroundColor = "red";
-		micSwitch.style.transform = "scale(1.2)";
-    } else {
-		micSwitch.style.backgroundColor = "black";
-		micSwitch.style.transform = 'scale(1)';
-    }
+micSwitch.addEventListener('click', async function() {
+	await toggleMic();
+	chrome.tabs.create({
+		url: chrome.runtime.getURL("/Webpage/index.html")
+	});
 });
+
+// Mic button style change on click
+async function toggleMic() {
+	micSwitch.style.backgroundColor = "red";
+	micOn.style.transform = "scale(1.3)";
+	setTimeout(function() {
+		micSwitch.style.backgroundColor = "black";
+        micOn.style.transform ='scale(1)';
+	}, 500);
+}
 
 // Function to delete conversation when delete button is clicked
 deleteButton.addEventListener('click', function() {
@@ -89,6 +96,25 @@ function stopSpeechSynthesis() {
     if (synthesis) {
         synthesis.stop();
     }
+}
+
+// Function to play bot's response as speech with the selected language
+function playBotResponse(responseText, language) {
+    const languageConfig = {
+        fr: 'fr-FR',
+        en: 'en-US',
+        es: 'es-ES',
+        zh: 'cmn-Hans-CN', // Mandarin
+        ar: 'ar-SA',      // Arabic
+        pt: 'pt-PT'       // Portuguese
+      // more languages can be added here
+    };
+
+    const selectedLanguage = languageConfig[language] || 'en-US'; // Default to English if language is not found
+
+    const utterance = new SpeechSynthesisUtterance(responseText);
+    utterance.lang = selectedLanguage; // Set the language for the speech synthesis
+    window.speechSynthesis.speak(utterance);
 }
 
 
@@ -300,23 +326,4 @@ async function createAnswerGpt(response) {
     const answer = document.createElement('p');
     answer.textContent = data.choices[0].text;
     return answer;
-}
-
-// Function to play bot's response as speech with the selected language
-function playBotResponse(responseText, language) {
-    const languageConfig = {
-        fr: 'fr-FR',
-        en: 'en-US',
-        es: 'es-ES',
-        zh: 'cmn-Hans-CN', // Mandarin
-        ar: 'ar-SA',      // Arabic
-        pt: 'pt-PT'       // Portuguese
-      // more languages can be added here
-    };
-
-    const selectedLanguage = languageConfig[language] || 'en-US'; // Default to English if language is not found
-
-    const utterance = new SpeechSynthesisUtterance(responseText);
-    utterance.lang = selectedLanguage; // Set the language for the speech synthesis
-    window.speechSynthesis.speak(utterance);
 }
