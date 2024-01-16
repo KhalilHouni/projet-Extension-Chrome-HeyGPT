@@ -7,7 +7,7 @@ const micSwitch = document.getElementById('switch');
 const micOn = document.getElementById('mic-on');
 const settingsButton = document.getElementById('buttonSettings');
 const settingsMenu = document.getElementById('settingsMenu');
-const GPT_API_KEY = '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';
+const GPT_API_KEY = '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';
 const URL = 'https://api.openai.com/v1/completions';
 const weatherApiKey = "23e05a7ea147f7645052bf0de2fd3fa3";
 const weatherApiUrl = "https://api.openweathermap.org/data/2.5/weather?&units=metric&q=";
@@ -139,24 +139,23 @@ function playBotResponse(responseText, language) {
 
 
 // ---------- Talk To The Bot Functions ---------- //
-
 // Event listener for send button
 buttonSend.addEventListener('click', async function() {
-	clearConversation();
+    clearConversation();
     const userQuestion = inputQuestion.value;
     if (userQuestion) {
         if (shouldPerformGoogleSearch(userQuestion)) {
-        	// Respond with "looking on the browser..."
-        	const lookingMessage = createLookingMessage();
-        	appendToConversation(lookingMessage);
+            // Respond with "looking on the browser..."
+            const lookingMessage = createLookingMessage();
+            appendToConversation(lookingMessage);
 
-        	// Disable ChatGPT
-        	stopSpeechSynthesis();
+            // Disable ChatGPT
+            stopSpeechSynthesis();
 
-        	// Perform the Google search
-        	performGoogleSearch(userQuestion);
-		} else if (shouldPerformGoogleImagesSearch(userQuestion)) {
-			// Respond with "looking on the browser..."
+            // Perform the Google search
+            performGoogleSearch(userQuestion);
+        } else if (shouldPerformGoogleImagesSearch(userQuestion)) {
+            // Respond with "looking on the browser..."
             const lookingMessage = createLookingMessage();
             appendToConversation(lookingMessage);
 
@@ -165,24 +164,25 @@ buttonSend.addEventListener('click', async function() {
 
             // Perform the Google Images search
             performGoogleImagesSearch(userQuestion);
-		} else if (userQuestion.includes("weather")) {
+        } else if (userQuestion.toLowerCase().includes('search on youtube')) {
+            const query = userQuestion.replace('search on youtube', '').trim();
+            // Perform the YouTube search
+            chrome.runtime.sendMessage({ action: 'performYouTubeSearch', query: query });
+        } else if (userQuestion.includes("weather")) {
             const location = userQuestion.replace("weather", "").trim();
-        	const weatherData = await getWeatherInfo(location);
-			const weatherMessage = createWeatherAnswer(weatherData);
-			const gptTag = createGptTag();
-			appendToConversation(gptTag);
-			appendToConversation(weatherMessage);
+            const weatherData = await getWeatherInfo(location);
+            const weatherMessage = createWeatherAnswer(weatherData);
+            const gptTag = createGptTag();
+            appendToConversation(gptTag);
+            appendToConversation(weatherMessage);
         } else { 
-        	triggerChatGPT(userQuestion);
-		}
+            triggerChatGPT(userQuestion);
+        }
     } else {
-		const errorMessage = createErrorMessage();
-		appendToConversation(errorMessage);
-	}
+        const errorMessage = createErrorMessage();
+        appendToConversation(errorMessage);
+    }
 });
-
-
-
 
 
 /// --------------- Google Search Functions --------------- ///
