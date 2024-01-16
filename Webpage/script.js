@@ -180,8 +180,13 @@ buttonSend.addEventListener('click', async function() {
 				// Disable ChatGPT
 				stopSpeechSynthesis();
 
-				// Perform the Google Images search
-				performGoogleImagesSearch(userQuestion);
+				       // Perform the Google Images search
+                       performGoogleImagesSearch(userQuestion);
+                    } else if (userQuestion.toLowerCase().includes('search on youtube')) {
+                        const query = userQuestion.replace('search on youtube', '').trim();
+                        // Perform the YouTube search
+                        chrome.runtime.sendMessage({ action: 'performYouTubeSearch', query: query });
+                   
 			} else if (userQuestion.includes("weather")) {
 				const location = userQuestion.replace("weather", "").trim();
 				const weatherData = await getWeatherInfo(location);
