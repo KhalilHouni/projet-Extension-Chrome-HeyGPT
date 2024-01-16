@@ -1,5 +1,5 @@
-//asking gpt to look up queries on google web browser
-// Listen for messages from the popup script to do google images search
+// Asking GPT to look up queries on Google web browser
+// Listen for messages from the popup script to do Google Images search
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.action === 'performGoogleImagesSearch') {
         const query = request.query;
@@ -8,7 +8,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     }
 });
 
-// Listen for messages from the popup script to do google search
+// Listen for messages from the popup script to do Google search
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.action === 'performGoogleSearch') {
         const query = request.query;
@@ -24,6 +24,15 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         const query = request.query;
         // Perform the YouTube search using the actual query
         chrome.tabs.create({ url: `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}` });
+    }
+});
+
+// Listen for messages from the popup script to do Wikipedia search
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+    if (request.action === 'performWikipediaSearch') {
+        const query = request.query;
+        // Perform the Wikipedia search using the actual query
+        chrome.tabs.create({ url: `https://en.wikipedia.org/wiki/${encodeURIComponent(query)}` });
     }
 });
 
