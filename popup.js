@@ -194,57 +194,57 @@ function playBotResponse(responseText, language) {
 // Event listener for send button
 buttonSend.addEventListener('click', async function() {
     clearConversation();
-    if (GPT_API_KEY === "" || !GPT_API_KEY) {
-        triggerErrorApiKeyUndifined();
-    } else {
-        const userQuestion = inputQuestion.value;
-        if (userQuestion) {
-            if (shouldPerformGoogleSearch(userQuestion)) {
-                // Respond with "looking on the browser..."
-                const lookingMessage = createLookingMessage();
-                appendToConversation(lookingMessage);
+	if (GPT_API_KEY === "" || !GPT_API_KEY) {
+		triggerErrorApiKeyUndifined();
+	} else {
+		const userQuestion = inputQuestion.value;
+		if (userQuestion) {
+			if (shouldPerformGoogleSearch(userQuestion)) {
+				// Respond with "looking on the browser..."
+				const lookingMessage = createLookingMessage();
+				appendToConversation(lookingMessage);
 
-                // Disable ChatGPT
-                stopSpeechSynthesis();
+				// Disable ChatGPT
+				stopSpeechSynthesis();
 
-                // Perform the Google search
-                performGoogleSearch(userQuestion);
-            } else if (shouldPerformGoogleImagesSearch(userQuestion)) {
-                // Respond with "looking on the browser..."
-                const lookingMessage = createLookingMessage();
-                appendToConversation(lookingMessage);
+				// Perform the Google search
+				performGoogleSearch(userQuestion);
+			} else if (shouldPerformGoogleImagesSearch(userQuestion)) {
+				// Respond with "looking on the browser..."
+				const lookingMessage = createLookingMessage();
+				appendToConversation(lookingMessage);
 
-                // Disable ChatGPT
-                stopSpeechSynthesis();
+				// Disable ChatGPT
+				stopSpeechSynthesis();
 
-                // Perform the Google Images search
-                performGoogleImagesSearch(userQuestion);
-            } else if (userQuestion.toLowerCase().includes('search on youtube')) {
-                const query = userQuestion.replace('search on youtube', '').trim();
-                // Perform the YouTube search
-                performYouTubeSearch(query);
-            } else if (userQuestion.toLowerCase().includes('search on wikipedia')) {
-                const query = userQuestion.replace('search on wikipedia', '').trim();
-                // Perform the Wikipedia search
-                performWikipediaSearch(query);
-            } else if (userQuestion.includes("weather")) {
-                const location = userQuestion.replace("weather", "").trim();
-                const weatherData = await getWeatherInfo(location);
-                const weatherMessage = createWeatherAnswer(weatherData);
-                const gptTag = createGptTag();
-                appendToConversation(weatherMessage);
-            } else { 
-                triggerChatGPT(userQuestion);
-            }
-        } else {
-            const errorMessage = createErrorMessage("An Error has occured. Please try again.");
-            const gptTag = createGptTag();
-            appendToConversation(gptTag);
-            appendToConversation(errorMessage);
-        }
-    }
-    countUserquestion();
+				// Perform the Google Images search
+				performGoogleImagesSearch(userQuestion);
+			} else if (userQuestion.toLowerCase().includes('search on youtube')) {
+				const query = userQuestion.replace('search on youtube', '').trim();
+				// Perform the YouTube search
+				chrome.runtime.sendMessage({ action: 'performYouTubeSearch', query: query });
+			} else if (
+                userQuestion.toLowerCase().includes("weather") ||
+                userQuestion.toLowerCase().includes("clima") ||
+                userQuestion.includes("天气") ||
+                userQuestion.includes("الطقس") ||
+                userQuestion.toLowerCase().includes("météo")
+            ) {
+                const location = extractLocationFromQuestion();
+                getWeatherInfo(location);
+			} else { 
+				triggerChatGPT(userQuestion);
+			}
+		} else {
+			const errorMessage = createErrorMessage("An Error has occured. Please try again.");
+			const gptTag = createGptTag();
+			appendToConversation(gptTag);
+			appendToConversation(errorMessage);
+		}
+	}
+	countUserquestion();
 });
+
 
 // Counter to track the number of questions asked
 let questionCounter = 0;
@@ -332,27 +332,29 @@ function createErrorMessage(message) {
 
 /// --------------- WeatherApi Functions --------------- ///
 
-async function getWeatherInfo(location) {
-    return await fetch(`${weatherApiUrl}${location}&appid=${weatherApiKey}`)
-        .then(response => response.json())
-        .then(data => {
-            const weatherDescription = data.weather[0].description;
-            const temperature = data.main.temp;
-        	const weatherInfo = `Weather in ${location}: ${weatherDescription}, Temperature: ${temperature}°C`;
-			console.log(weatherInfo);
-			return weatherInfo;
-        })
-        .catch(error => {
-            console.error('Error fetching weather data:', error);
-        });
+function getWeatherInfo(location) {
+    fetch(`${weatherApiUrl}${location}&appid=${weatherApiKey}`)
+ .then(response => response.json())
+ .then(data => {
+     const weatherDescription = data.weather[0].description;
+     const temperature = data.main.temp;
+     const weatherInfo = `Weather in ${location}: ${weatherDescription}, Temperature: ${temperature}°C`;
+     console.log(weatherInfo);
+     const answerWeather = document.createElement('p');
+     answerWeather.textContent = weatherInfo;
+     convArea.appendChild(answerWeather);
+ })
+ .catch(error => {
+     console.error('Error fetching weather data:', error);
+ });
 }
 
-
-function createWeatherAnswer(weatherData) {
-	const answerWeather = document.createElement('p');
-	answerWeather.textContent = weatherData;
-	return answerWeather;
-}
+function extractLocationFromQuestion() {
+    let locationSp = inputQuestion.value.split(' ');
+    let locationFin= locationSp[locationSp.length - 1];
+    console.log(locationFin);
+    return locationFin
+     }
 
 
 /// --------------- ChatGPT Functions --------------- ///
