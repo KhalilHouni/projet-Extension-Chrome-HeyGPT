@@ -331,7 +331,7 @@ select {
 }
 
 
-.buttonStop {
+.button {
 	width: 100px;
 	height: 30px;
 	display: flex;

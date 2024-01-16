@@ -5,9 +5,8 @@ const voiceControlCheckbox = document.getElementById('voice-control-checkbox');
 const deleteButton = document.getElementById('delete-button');
 const micSwitch = document.getElementById('switch');
 const micOn = document.getElementById('mic-on');
-const settingsButton = document.getElementById('buttonSettings');
-const settingsMenu = document.getElementById('settingsMenu');
 const micCheckbox = document.getElementById('mic-checkbox');
+const saveToFileButton = document.getElementById('saveToFile'); // Added button for Save to File
 const apiKeySaveButton = document.getElementById('apiKeySave');
 const apiKeyInput = document.getElementById('apiKeyInput');
 var GPT_API_KEY = "";
@@ -26,7 +25,7 @@ var isVoiceEnabled = true; // Set bot's voice to "off" by default
 // When the page is loaded print welcome message
 document.addEventListener('DOMContentLoaded', function() {
     var welcome = document.createElement('p');
-	welcome.textContent = "Welcome, I am Hey GPT. Ask me any question, either orally or textually using the dedicated buttons below and i will provide the best answer. By default I answer you with speech synthesis, you can disable that below with mute button, moreover you can choose the language of your choice for TTS with the languages menu. I can tell yout the actual weather in any city in the world, use : \'weather\' + city name. Also, I can do Google search with : \'search on google\' + your search, or \'search on google pictures of\' + your search, for images search. I was made with ❤️ by Khalil, Maud, and Rémy.";
+	welcome.textContent = "Welcome, I am Hey GPT. Ask me any question, either orally or textually using the dedicated buttons below. I will provide the best possible answer. I will by default answer you with speech synthesis, you can disable that below with mute button, moreover you can choose the language of your choice for speech synthesis with the languages menu. I can tell yout the actual weather in any city in the world (use : \'weather\' + city name). Also, I can do Google search with : \'search on google\' + your search, or \'search on google pictures of\' + your search, for images search. I was made with ❤️ by Khalil, Maud, and Rémy.";
 	var gptTag = createGptTag();
 	convArea.appendChild(gptTag);
 	convArea.appendChild(welcome);
@@ -84,7 +83,6 @@ apiKeySaveButton.addEventListener('click', function() {
 	apiKeyInput.value = "";
 	GPT_API_KEY = localStorage.getItem("GPT_API_KEY");
 })
-
 
 
 // -------- Speech Synthesis Functions -------- //
@@ -180,6 +178,25 @@ buttonSend.addEventListener('click', async function() {
 	}
 });
 
+
+// Counter to track the number of questions asked
+let questionCounter = 0;
+
+// Event listener for send button
+buttonSend.addEventListener('click', async function() {
+    // Increment the question counter
+    questionCounter++;
+
+    // Log the user question in the console
+    console.log(`User Question ${questionCounter}: ${inputQuestion.value}`);
+
+    if (questionCounter % 3 === 0) {
+        // Clear the console after every third question
+        console.clear();
+    }
+
+   
+});
 
 
 
@@ -347,7 +364,14 @@ async function createAnswerGpt(response) {
     return answer;
 }
 
-
+// Function to press the button send with the key enter
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        const clickEvent = new Event('click');
+        buttonSend.dispatchEvent(clickEvent);
+    }
+});
 /// --------------- Record mic functions --------------- ///
 
 // Request permission to use the microphone and set up it
@@ -418,3 +442,47 @@ function stopMicrophone() {
         audioContext.close();
     }
 }
+
+
+// Add a button for reading and logging user questions
+const logUserQuestionsButton = document.createElement('button');
+logUserQuestionsButton.textContent = 'Log User Questions';
+logUserQuestionsButton.addEventListener('click', function () {
+    readAndLogUserQuestion();
+});
+document.body.appendChild(logUserQuestionsButton);
+
+
+// Function to create user question element without clearing the inputQuestion value
+function createUserQuestion(userInput) {
+    const userQuestion = document.createElement('p');
+    userQuestion.textContent = userInput;
+    return userQuestion;
+}
+
+
+// Function to log the user question in the console and save it to a .txt file
+function saveUserQuestionsToFile() {
+    const userQuestion = inputQuestion.value; // Get the user input directly from the input field
+
+    if (userQuestion) {
+        // Create a Blob containing the user question as a .txt file
+        const blob = new Blob([userQuestion], { type: 'text/plain' });
+
+        // Use FileReader to read the Blob as a data URL
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            // Create a download link for the .txt file
+            const downloadLink = document.createElement('a');
+            downloadLink.download = 'user_question.txt';
+            downloadLink.href = event.target.result;
+            downloadLink.click();
+        };
+        reader.readAsDataURL(blob);
+    } else {
+        console.error('No user question found to save.');
+    }
+}
+
+// Event listener for the "Save to File" button
+saveToFileButton.addEventListener('click', saveUserQuestionsToFile);
