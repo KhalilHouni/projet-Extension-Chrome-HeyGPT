@@ -5,6 +5,8 @@ const voiceControlCheckbox = document.getElementById('voice-control-checkbox');
 const deleteButton = document.getElementById('delete-button');
 const micSwitch = document.getElementById('switch');
 const micOn = document.getElementById('mic-on');
+const settingsButton = document.getElementById('buttonSettings');
+const settingsMenu = document.getElementById('settingsMenu');
 const GPT_API_KEY = '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';
 const URL = 'https://api.openai.com/v1/completions';
 const weatherApiKey = "23e05a7ea147f7645052bf0de2fd3fa3";
@@ -18,7 +20,7 @@ let isVoiceEnabled = true; // Set bot's voice to "off" by default
 // When the page is loaded print welcome message
 document.addEventListener('DOMContentLoaded', function() {
     var welcome = document.createElement('p');
-	welcome.textContent = "Welcome, I am Hey GPT. Ask me any question, either orally or textually using the dedicated buttons below. I will provide the best possible answer. I will by default answer you with speech synthesis, you can disable that below with mute button, moreover you can choose the language of your choice for speech synthesis with the languages menu. I can tell yout the actual weather in any city in the world (use : \'weather\' + city name). Also, I can do Google search with : \'search on google\' + your search, or \'search on google pictures of\' + your search, for images search. I was made with ❤️ by Khalil, Maud, and Rémy.";
+	welcome.textContent = "Welcome, I am Hey GPT. Ask me any question, either orally or textually using the dedicated buttons below and i will provide the best answer. By default I answer you with speech synthesis, you can disable that below with mute button, moreover you can choose the language of your choice for TTS with the languages menu. I can tell yout the actual weather in any city in the world, use : \'weather\' + city name. Also, I can do Google search with : \'search on google\' + your search, or \'search on google pictures of\' + your search, for images search. I was made with ❤️ by Khalil, Maud, and Rémy.";
 	var gptTag = createGptTag();
 	convArea.appendChild(gptTag);
 	convArea.appendChild(welcome);
@@ -84,6 +86,14 @@ document.addEventListener('keydown', function(event) {
     }
 });
 
+// Settings menu button display on click
+settingsButton.addEventListener('click', function() {
+	if (settingsMenu.style.display === 'block') {
+    	settingsMenu.style.display = 'none';
+	} else {
+    	settingsMenu.style.display = 'block';
+    }
+});
 
 // -------- Speech Synthesis Functions -------- //
 
