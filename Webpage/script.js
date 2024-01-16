@@ -6,14 +6,17 @@ const deleteButton = document.getElementById('delete-button');
 const micSwitch = document.getElementById('switch');
 const micOn = document.getElementById('mic-on');
 const micCheckbox = document.getElementById('mic-checkbox');
+
 const saveToFileButton = document.getElementById('saveToFile');
 const settingsButton = document.getElementById('settingsButton');
 const settingsMenu = document.getElementById('settingsMenu');
 const apiKeySaveButton = document.getElementById('apiKeySave');
 const apiKeyInput = document.getElementById('apiKeyInput');
+
 const URL = 'https://api.openai.com/v1/completions';
 const weatherApiKey = "23e05a7ea147f7645052bf0de2fd3fa3";
 const weatherApiUrl = "https://api.openweathermap.org/data/2.5/weather?&units=metric&q=";
+
 var synthesis;
 var recognition;
 var microphone;

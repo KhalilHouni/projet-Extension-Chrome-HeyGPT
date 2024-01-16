@@ -5,26 +5,52 @@ const voiceControlCheckbox = document.getElementById('voice-control-checkbox');
 const deleteButton = document.getElementById('delete-button');
 const micSwitch = document.getElementById('switch');
 const micOn = document.getElementById('mic-on');
-const settingsButton = document.getElementById('buttonSettings');
+const micCheckbox = document.getElementById('mic-checkbox');
+
+const saveToFileButton = document.getElementById('saveToFile');
+const settingsButton = document.getElementById('settingsButton');
 const settingsMenu = document.getElementById('settingsMenu');
-const GPT_API_KEY = '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';
+const apiKeySaveButton = document.getElementById('apiKeySave');
+const apiKeyInput = document.getElementById('apiKeyInput');
+
 const URL = 'https://api.openai.com/v1/completions';
 const weatherApiKey = "23e05a7ea147f7645052bf0de2fd3fa3";
 const weatherApiUrl = "https://api.openweathermap.org/data/2.5/weather?&units=metric&q=";
-let synthesis;
-let isVoiceEnabled = true; // Set bot's voice to "off" by default
+
+var synthesis;
+var recognition;
+var microphone;
+var audioContext;
+var lastUserQuestion;
+var GPT_API_KEY = localStorage.getItem('GPT_API_KEY');
+var isVoiceEnabled = true; // Set bot's voice to "on" by default
 
 
-// --------- Buttons PopUP Functions --------- //
+
+// ------ On load actions ------ //
+
+const isApiKeySaved = document.getElementById('isApiKeySaved');
+
+
 
 // When the page is loaded print welcome message
 document.addEventListener('DOMContentLoaded', function() {
     var welcome = document.createElement('p');
-	welcome.textContent = "Welcome, I am Hey GPT. Ask me any question, either orally or textually using the dedicated buttons below and i will provide the best answer. By default I answer you with speech synthesis, you can disable that below with mute button, moreover you can choose the language of your choice for TTS with the languages menu. I can tell yout the actual weather in any city in the world, use : \'weather\' + city name. Also, I can do Google search with : \'search on google\' + your search, or \'search on google pictures of\' + your search, for images search. I was made with ❤️ by Khalil, Maud, and Rémy.";
+	welcome.textContent = "Welcome, I am Hey GPT. Ask me any question, either orally or textually using the dedicated buttons below. I will provide the best possible answer. I will by default answer you with speech synthesis, you can disable that below with mute button, moreover you can choose the language of your choice for speech synthesis with the languages menu. I can tell yout the actual weather in any city in the world (use : \'weather\' + city name). Also, I can do Google search with : \'search on google\' + your search, or \'search on google pictures of\' + your search, for images search. I was made with ❤️ by Khalil, Maud, and Rémy.";
 	var gptTag = createGptTag();
 	convArea.appendChild(gptTag);
 	convArea.appendChild(welcome);
+
+	if (GPT_API_KEY) {
+		isApiKeySaved.style.color = "green";
+		isApiKeySaved.textContent = "🟢 API key saved";
+		isApiKeySaved.style.marginLeft = "20px";
+	}
 });
+
+
+// --------- Buttons PopUP Functions --------- //
+
 
 // When the mic checkbox is check scale it
 micSwitch.addEventListener('click', async function() {
@@ -95,6 +121,20 @@ settingsButton.addEventListener('click', function() {
     }
 });
 
+// Event listener for save API key button
+apiKeySaveButton.addEventListener('click', function() {
+	if (!apiKeyInput.value) {
+		return;
+	} else {
+		localStorage.setItem("GPT_API_KEY", apiKeyInput.value);
+		apiKeyInput.value = "";
+		GPT_API_KEY = localStorage.getItem("GPT_API_KEY");
+		isApiKeySaved.style.color = "green";
+		isApiKeySaved.textContent = "🟢 API key saved";
+		isApiKeySaved.style.marginLeft = "20px";
+	}
+});
+
 // -------- Speech Synthesis Functions -------- //
 
 function startSpeechSynthesis() {
@@ -142,47 +182,86 @@ function playBotResponse(responseText, language) {
 // Event listener for send button
 buttonSend.addEventListener('click', async function() {
     clearConversation();
-    const userQuestion = inputQuestion.value;
-    if (userQuestion) {
-        if (shouldPerformGoogleSearch(userQuestion)) {
-            // Respond with "looking on the browser..."
-            const lookingMessage = createLookingMessage();
-            appendToConversation(lookingMessage);
+	if (GPT_API_KEY === "" || !GPT_API_KEY) {
+		triggerErrorApiKeyUndifined();
+	} else {
+		const userQuestion = inputQuestion.value;
+		if (userQuestion) {
+			if (shouldPerformGoogleSearch(userQuestion)) {
+				// Respond with "looking on the browser..."
+				const lookingMessage = createLookingMessage();
+				appendToConversation(lookingMessage);
 
-            // Disable ChatGPT
-            stopSpeechSynthesis();
+				// Disable ChatGPT
+				stopSpeechSynthesis();
 
-            // Perform the Google search
-            performGoogleSearch(userQuestion);
-        } else if (shouldPerformGoogleImagesSearch(userQuestion)) {
-            // Respond with "looking on the browser..."
-            const lookingMessage = createLookingMessage();
-            appendToConversation(lookingMessage);
+				// Perform the Google search
+				performGoogleSearch(userQuestion);
+			} else if (shouldPerformGoogleImagesSearch(userQuestion)) {
+				// Respond with "looking on the browser..."
+				const lookingMessage = createLookingMessage();
+				appendToConversation(lookingMessage);
 
-            // Disable ChatGPT
-            stopSpeechSynthesis();
+				// Disable ChatGPT
+				stopSpeechSynthesis();
 
-            // Perform the Google Images search
-            performGoogleImagesSearch(userQuestion);
-        } else if (userQuestion.toLowerCase().includes('search on youtube')) {
-            const query = userQuestion.replace('search on youtube', '').trim();
-            // Perform the YouTube search
-            chrome.runtime.sendMessage({ action: 'performYouTubeSearch', query: query });
-        } else if (userQuestion.includes("weather")) {
-            const location = userQuestion.replace("weather", "").trim();
-            const weatherData = await getWeatherInfo(location);
-            const weatherMessage = createWeatherAnswer(weatherData);
-            const gptTag = createGptTag();
-            appendToConversation(gptTag);
-            appendToConversation(weatherMessage);
-        } else { 
-            triggerChatGPT(userQuestion);
-        }
-    } else {
-        const errorMessage = createErrorMessage();
-        appendToConversation(errorMessage);
-    }
+				// Perform the Google Images search
+				performGoogleImagesSearch(userQuestion);
+			} else if (userQuestion.toLowerCase().includes('search on youtube')) {
+				const query = userQuestion.replace('search on youtube', '').trim();
+				// Perform the YouTube search
+				chrome.runtime.sendMessage({ action: 'performYouTubeSearch', query: query });
+			} else if (userQuestion.includes("weather")) {
+				const location = userQuestion.replace("weather", "").trim();
+				const weatherData = await getWeatherInfo(location);
+				const weatherMessage = createWeatherAnswer(weatherData);
+				const gptTag = createGptTag();
+				appendToConversation(gptTag);
+				appendToConversation(weatherMessage);
+			} else { 
+				triggerChatGPT(userQuestion);
+			}
+		} else {
+			const errorMessage = createErrorMessage("An Error has occured. Please try again.");
+			const gptTag = createGptTag();
+			appendToConversation(gptTag);
+			appendToConversation(errorMessage);
+		}
+	}
+	countUserquestion();
 });
+
+// Counter to track the number of questions asked
+let questionCounter = 0;
+
+function countUserquestion() {
+	questionCounter++;
+
+	// Log the user question in the console
+	console.log(`User Question ${questionCounter}: ${inputQuestion.value}`);
+
+	if (questionCounter % 3 === 0) {
+		// Clear the console after every third question
+		console.clear();
+	}
+}
+
+function triggerErrorApiKeyUndifined() {
+	const errorMessage = createErrorMessage("You need to save your API key in the settings menu before you can talk to the bot.");
+	const userTag = createUserTag();
+	const gptTag = createGptTag();
+	const userQuestion = createUserQuestion(inputQuestion.value);
+	appendToConversation(userTag);
+	appendToConversation(userQuestion);
+	appendToConversation(gptTag);
+	appendToConversation(errorMessage);
+	setTimeout(function () {
+		console.log(settingsMenu.style.display);
+		if (settingsMenu.style.display !== 'block') {
+			settingsMenu.style.display = 'block';
+		}
+	}, 1000);
+}
 
 
 /// --------------- Google Search Functions --------------- ///
