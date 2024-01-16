@@ -6,10 +6,11 @@ const deleteButton = document.getElementById('delete-button');
 const micSwitch = document.getElementById('switch');
 const micOn = document.getElementById('mic-on');
 const micCheckbox = document.getElementById('mic-checkbox');
-const saveToFileButton = document.getElementById('saveToFile'); // Added button for Save to File
+const saveToFileButton = document.getElementById('saveToFile');
+const settingsButton = document.getElementById('settingsButton');
+const settingsMenu = document.getElementById('settingsMenu');
 const apiKeySaveButton = document.getElementById('apiKeySave');
 const apiKeyInput = document.getElementById('apiKeyInput');
-var GPT_API_KEY = "";
 const URL = 'https://api.openai.com/v1/completions';
 const weatherApiKey = "23e05a7ea147f7645052bf0de2fd3fa3";
 const weatherApiUrl = "https://api.openweathermap.org/data/2.5/weather?&units=metric&q=";
@@ -17,7 +18,8 @@ var synthesis;
 var recognition;
 var microphone;
 var audioContext;
-var isVoiceEnabled = true; // Set bot's voice to "off" by default
+var GPT_API_KEY = localStorage.getItem('GPT_API_KEY');
+var isVoiceEnabled = true; // Set bot's voice to "on" by default
 
 // ------ On load actions ------ //
 
@@ -70,6 +72,7 @@ voiceControlCheckbox.addEventListener('change', function() {
 
 // Settings menu button display on click
 settingsButton.addEventListener('click', function() {
+	console.log(settingsMenu.style.display);
 	if (settingsMenu.style.display === 'block') {
     	settingsMenu.style.display = 'none';
 	} else {
@@ -82,7 +85,7 @@ apiKeySaveButton.addEventListener('click', function() {
 	localStorage.setItem("GPT_API_KEY", apiKeyInput.value);
 	apiKeyInput.value = "";
 	GPT_API_KEY = localStorage.getItem("GPT_API_KEY");
-})
+});
 
 
 // -------- Speech Synthesis Functions -------- //
@@ -134,10 +137,8 @@ function playBotResponse(responseText, language) {
 buttonSend.addEventListener('click', async function() {
 	clearConversation();
 	if (GPT_API_KEY === "" || !GPT_API_KEY) {
-		const errorMessage = createErrorMessage("You need to save your API key in the settings menu before you can talk to the bot.");
-		const gptTag = createGptTag();
-		appendToConversation(gptTag);
-		appendToConversation(errorMessage);
+		console.log("test")
+		triggerErrorApiKeyUndifined();
 	} else {
 		const userQuestion = inputQuestion.value;
 		if (userQuestion) {
@@ -194,12 +195,25 @@ buttonSend.addEventListener('click', async function() {
         // Clear the console after every third question
         console.clear();
     }
-
-   
 });
 
 
-
+function triggerErrorApiKeyUndifined() {
+	const errorMessage = createErrorMessage("You need to save your API key in the settings menu before you can talk to the bot.");
+	const userTag = createUserTag();
+	const gptTag = createGptTag();
+	const userQuestion = createUserQuestion(inputQuestion.value);
+	appendToConversation(userTag);
+	appendToConversation(userQuestion);
+	appendToConversation(gptTag);
+	appendToConversation(errorMessage);
+	setTimeout(function () {
+		console.log(settingsMenu.style.display);
+		if (settingsMenu.style.display !== 'block') {
+			settingsMenu.style.display = 'block';
+		}
+	}, 1000);
+}
 
 /// --------------- Google Search Functions --------------- ///
 
@@ -284,7 +298,7 @@ async function triggerChatGPT(userInput) {
 
     const language = document.getElementById('language-select').value; // Get the selected language
 
-    const gptAnswer = await askQuestion(userInput, language);
+    const gptAnswer = await askQuestion(userInput);
     appendToConversation(gptAnswer);
     if (isVoiceEnabled) {
         playBotResponse(gptAnswer.textContent, language); // Pass the selected language to the playBotResponse function
@@ -372,6 +386,10 @@ document.addEventListener('keydown', function(event) {
         buttonSend.dispatchEvent(clickEvent);
     }
 });
+
+
+
+
 /// --------------- Record mic functions --------------- ///
 
 // Request permission to use the microphone and set up it
@@ -443,22 +461,16 @@ function stopMicrophone() {
     }
 }
 
-
-// Add a button for reading and logging user questions
-const logUserQuestionsButton = document.createElement('button');
-logUserQuestionsButton.textContent = 'Log User Questions';
-logUserQuestionsButton.addEventListener('click', function () {
-    readAndLogUserQuestion();
-});
-document.body.appendChild(logUserQuestionsButton);
-
-
 // Function to create user question element without clearing the inputQuestion value
 function createUserQuestion(userInput) {
     const userQuestion = document.createElement('p');
     userQuestion.textContent = userInput;
+    inputQuestion.value = "";
     return userQuestion;
 }
+
+
+
 
 
 // Function to log the user question in the console and save it to a .txt file
@@ -485,4 +497,4 @@ function saveUserQuestionsToFile() {
 }
 
 // Event listener for the "Save to File" button
-saveToFileButton.addEventListener('click', saveUserQuestionsToFile);
+// saveToFileButton.addEventListener('click', saveUserQuestionsToFile);
