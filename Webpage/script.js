@@ -8,7 +8,9 @@ const micOn = document.getElementById('mic-on');
 const settingsButton = document.getElementById('buttonSettings');
 const settingsMenu = document.getElementById('settingsMenu');
 const micCheckbox = document.getElementById('mic-checkbox');
-const GPT_API_KEY = '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';
+const apiKeySaveButton = document.getElementById('apiKeySave');
+const apiKeyInput = document.getElementById('apiKeyInput');
+var GPT_API_KEY = "";
 const URL = 'https://api.openai.com/v1/completions';
 const weatherApiKey = "23e05a7ea147f7645052bf0de2fd3fa3";
 const weatherApiUrl = "https://api.openweathermap.org/data/2.5/weather?&units=metric&q=";
@@ -30,8 +32,9 @@ document.addEventListener('DOMContentLoaded', function() {
 	convArea.appendChild(welcome);
 });
 
-// --------- Buttons page Functions --------- //
 
+
+// --------- Buttons page Functions --------- //
 
 
 // Function to delete conversation when delete button is clicked
@@ -74,6 +77,13 @@ settingsButton.addEventListener('click', function() {
     	settingsMenu.style.display = 'block';
     }
 });
+
+// Event listener for save API key button
+apiKeySaveButton.addEventListener('click', function() {
+	localStorage.setItem("GPT_API_KEY", apiKeyInput.value);
+	apiKeyInput.value = "";
+	GPT_API_KEY = localStorage.getItem("GPT_API_KEY");
+})
 
 
 
@@ -125,41 +135,48 @@ function playBotResponse(responseText, language) {
 // Event listener for send button
 buttonSend.addEventListener('click', async function() {
 	clearConversation();
-    const userQuestion = inputQuestion.value;
-    if (userQuestion) {
-        if (shouldPerformGoogleSearch(userQuestion)) {
-        	// Respond with "looking on the browser..."
-        	const lookingMessage = createLookingMessage();
-        	appendToConversation(lookingMessage);
-
-        	// Disable ChatGPT
-        	stopSpeechSynthesis();
-
-        	// Perform the Google search
-        	performGoogleSearch(userQuestion);
-		} else if (shouldPerformGoogleImagesSearch(userQuestion)) {
-			// Respond with "looking on the browser..."
-            const lookingMessage = createLookingMessage();
-            appendToConversation(lookingMessage);
-
-            // Disable ChatGPT
-            stopSpeechSynthesis();
-
-            // Perform the Google Images search
-            performGoogleImagesSearch(userQuestion);
-		} else if (userQuestion.includes("weather")) {
-            const location = userQuestion.replace("weather", "").trim();
-        	const weatherData = await getWeatherInfo(location);
-			const weatherMessage = createWeatherAnswer(weatherData);
-			const gptTag = createGptTag();
-			appendToConversation(gptTag);
-			appendToConversation(weatherMessage);
-        } else { 
-        	triggerChatGPT(userQuestion);
-		}
-    } else {
-		const errorMessage = createErrorMessage();
+	if (GPT_API_KEY === "" || !GPT_API_KEY) {
+		const errorMessage = createErrorMessage("You need to save your API key in the settings menu before you can talk to the bot.");
+		const gptTag = createGptTag();
+		appendToConversation(gptTag);
 		appendToConversation(errorMessage);
+	} else {
+		const userQuestion = inputQuestion.value;
+		if (userQuestion) {
+			if (shouldPerformGoogleSearch(userQuestion)) {
+				// Respond with "looking on the browser..."
+				const lookingMessage = createLookingMessage();
+				appendToConversation(lookingMessage);
+
+				// Disable ChatGPT
+				stopSpeechSynthesis();
+
+				// Perform the Google search
+				performGoogleSearch(userQuestion);
+			} else if (shouldPerformGoogleImagesSearch(userQuestion)) {
+				// Respond with "looking on the browser..."
+				const lookingMessage = createLookingMessage();
+				appendToConversation(lookingMessage);
+
+				// Disable ChatGPT
+				stopSpeechSynthesis();
+
+				// Perform the Google Images search
+				performGoogleImagesSearch(userQuestion);
+			} else if (userQuestion.includes("weather")) {
+				const location = userQuestion.replace("weather", "").trim();
+				const weatherData = await getWeatherInfo(location);
+				const weatherMessage = createWeatherAnswer(weatherData);
+				const gptTag = createGptTag();
+				appendToConversation(gptTag);
+				appendToConversation(weatherMessage);
+			} else { 
+				triggerChatGPT(userQuestion);
+			}
+		} else {
+			const errorMessage = createErrorMessage("An Error has occured. Please try again.");
+			appendToConversation(errorMessage);
+		}
 	}
 });
 
@@ -200,9 +217,10 @@ function createLookingMessage() {
 }
 
 // Append in conv area error message
-function createErrorMessage() {
+function createErrorMessage(message) {
 	const errorMessage = document.createElement('p');
-	errorMessage.textContent = "An Error has occured. Please try again.";
+	errorMessage.textContent = message;
+	return errorMessage;
 }
 
 

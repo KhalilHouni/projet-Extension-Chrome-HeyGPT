@@ -78,8 +78,8 @@ h1 {
 }
 
 .settingsMenu {
-	width: 20dvw;
-	height: 10dvh;
+	width: 160px;
+	height: 90px;
 	position: absolute;
 	display: flex;
 	left: 2%;
@@ -185,7 +185,7 @@ select {
 
 .Message {
 	width: 300px;
-	height: 40px;
+	height: 45px;
 	border-radius: 10px;
 	background-color: black;
 	transform: translate(0px,0px);
@@ -199,7 +199,7 @@ select {
 	border: none;
 	outline: none;
 	width: 230px;
-	height: 20px;
+	height: 10px;
 	transform: translate(5px,-6px);
 	padding: 10px;
 	color: rgb(206, 203, 203);
@@ -208,7 +208,7 @@ select {
 
 .SendSVG {
 	width: 25px;
-	height: 30px;
+	height: 35px;
 	border-width: 30px;
 	transform: translate(15px,5px);
 	background-size: 10px;
