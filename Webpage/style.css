@@ -495,7 +495,7 @@ select {
 /* ---- Tooltips ---- */
 
 .tooltip1, .tooltip2, .tooltip3 {
-	--tooltip-color: rgb(41, 41, 41);
+	--tooltip-color: black;
 	position: absolute;
 	top: -40px;
 	background-color: var(--tooltip-color);
@@ -512,8 +512,44 @@ select {
 	transition: all 0.5s;
 }
 
-.tooltip1, .tooltip3, .tooltip2 {
-	width: 26px
+.tooltipSettings {
+	--tooltip-color: black;
+	position: absolute;
+	background-color: var(--tooltip-color);
+	color: white;
+	border-radius: 5px;
+	font-size: 12px;
+	padding: 8px 12px;
+	font-weight: 600;
+	right: -62px;
+	box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.105);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	opacity: 0;
+	transition: all 0.5s;
+}
+
+.tooltipSave {
+	--tooltip-color: black;
+	position: absolute;
+	background-color: var(--tooltip-color);
+	color: white;
+	border-radius: 5px;
+	font-size: 12px;
+	left: -62px;
+	padding: 8px 12px;
+	font-weight: 600;
+	box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.105);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	opacity: 0;
+	transition: all 0.5s;
+}
+
+.tooltip1, .tooltip3, .tooltip2, .tooltipSettings, .tooltipSave {
+	width: 30px
 }
 
 .tooltip1::before, .tooltip2::before, .tooltip3::before {
@@ -526,7 +562,36 @@ select {
 	bottom: -10%;
 }
 
+.tooltipSettings::before {
+	position: absolute;
+	content: "";
+	width: 10px;
+	height: 10px;
+	background-color: black;
+	background-size: 1000%;
+	background-position: center;
+	transform: rotate(45deg);
+	left: -5%;
+	transition-duration: .3s;
+}
 
-.deleteButton:hover .tooltip3, .switch:hover .tooltip1, .container:hover .tooltip2 {
+.tooltipSave::before {
+	position: absolute;
+	content: "";
+	width: 10px;
+	height: 10px;
+	background-color: black;
+	background-size: 1000%;
+	background-position: center;
+	transform: rotate(45deg);
+	right: -5%;
+	transition-duration: .3s;
+}
+
+.deleteButton:hover .tooltip3, 
+	.switch:hover .tooltip1, 
+	.container:hover .tooltip2, 
+	.buttonSettings:hover .tooltipSettings, 
+	.btnSaveToFile:hover .tooltipSave{
 	opacity: 1;
 }
