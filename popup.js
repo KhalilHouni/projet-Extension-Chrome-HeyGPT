@@ -135,6 +135,15 @@ apiKeySaveButton.addEventListener('click', function() {
 	}
 });
 
+// Function to press the button send with the key enter
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        const clickEvent = new Event('click');
+        buttonSend.dispatchEvent(clickEvent);
+    }
+});
+
 // -------- Speech Synthesis Functions -------- //
 
 function startSpeechSynthesis() {
@@ -179,6 +188,7 @@ function playBotResponse(responseText, language) {
 
 
 // ---------- Talk To The Bot Functions ---------- //
+
 // Event listener for send button
 buttonSend.addEventListener('click', async function() {
     clearConversation();
@@ -424,4 +434,37 @@ async function createAnswerGpt(response) {
     const answer = document.createElement('p');
     answer.textContent = data.choices[0].text;
     return answer;
+}
+
+
+
+/// --------------- Save To File Functions --------------- ///
+
+
+// Event listener for the "Save to File" button
+saveToFileButton.addEventListener('click', function() {
+	saveUserQuestionsToFile()
+});
+
+// Function to log the user question in the console and save it to a .txt file
+function saveUserQuestionsToFile() {
+
+    if (lastUserQuestion) {
+        // Create a Blob containing the user question as a .txt file
+        const blob = new Blob([lastUserQuestion], { type: 'text/plain' });
+
+        // Use FileReader to read the Blob as a data URL
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            // Create a download link for the .txt file
+            const downloadLink = document.createElement('a');
+            downloadLink.download = 'user_question.txt';
+            downloadLink.href = event.target.result;
+            downloadLink.click();
+        };
+        reader.readAsDataURL(blob);
+		lastUserQuestion = "";
+    } else {
+        console.error('No user question found to save.');
+    }
 }

@@ -109,6 +109,15 @@ apiKeySaveButton.addEventListener('click', function() {
 });
 
 
+// Function to press the button send with the key enter
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        const clickEvent = new Event('click');
+        buttonSend.dispatchEvent(clickEvent);
+    }
+});
+
 // -------- Speech Synthesis Functions -------- //
 
 function startSpeechSynthesis() {
@@ -180,13 +189,12 @@ buttonSend.addEventListener('click', async function() {
 				// Disable ChatGPT
 				stopSpeechSynthesis();
 
-				       // Perform the Google Images search
-                       performGoogleImagesSearch(userQuestion);
-                    } else if (userQuestion.toLowerCase().includes('search on youtube')) {
-                        const query = userQuestion.replace('search on youtube', '').trim();
-                        // Perform the YouTube search
-                        chrome.runtime.sendMessage({ action: 'performYouTubeSearch', query: query });
-                   
+				// Perform the Google Images search
+                performGoogleImagesSearch(userQuestion);
+            } else if (userQuestion.toLowerCase().includes('search on youtube')) {
+                const query = userQuestion.replace('search on youtube', '').trim();
+                // Perform the YouTube search
+                chrome.runtime.sendMessage({ action: 'performYouTubeSearch', query: query });
 			} else if (userQuestion.includes("weather")) {
 				const location = userQuestion.replace("weather", "").trim();
 				const weatherData = await getWeatherInfo(location);
@@ -403,14 +411,7 @@ async function createAnswerGpt(response) {
     return answer;
 }
 
-// Function to press the button send with the key enter
-document.addEventListener('keydown', function(event) {
-    if (event.key === 'Enter') {
-        event.preventDefault();
-        const clickEvent = new Event('click');
-        buttonSend.dispatchEvent(clickEvent);
-    }
-});
+
 
 
 
@@ -527,4 +528,3 @@ function saveUserQuestionsToFile() {
         console.error('No user question found to save.');
     }
 }
-
