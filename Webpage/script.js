@@ -18,10 +18,14 @@ var synthesis;
 var recognition;
 var microphone;
 var audioContext;
+var lastUserQuestion;
 var GPT_API_KEY = localStorage.getItem('GPT_API_KEY');
 var isVoiceEnabled = true; // Set bot's voice to "on" by default
 
 // ------ On load actions ------ //
+
+const isApiKeySaved = document.getElementById('isApiKeySaved');
+
 
 
 // When the page is loaded print welcome message
@@ -31,6 +35,12 @@ document.addEventListener('DOMContentLoaded', function() {
 	var gptTag = createGptTag();
 	convArea.appendChild(gptTag);
 	convArea.appendChild(welcome);
+
+	if (GPT_API_KEY) {
+		isApiKeySaved.style.color = "green";
+		isApiKeySaved.textContent = "🟢 API key saved 🟢";
+		isApiKeySaved.style.marginLeft = "18px";
+	}
 });
 
 
@@ -47,6 +57,7 @@ deleteButton.addEventListener('click', function() {
 // Function to clear conversation
 function clearConversation() {
     convArea.innerHTML = "";
+	lastUserQuestion = "";
 }
 
 // Event listener for stop audio button
@@ -82,9 +93,16 @@ settingsButton.addEventListener('click', function() {
 
 // Event listener for save API key button
 apiKeySaveButton.addEventListener('click', function() {
-	localStorage.setItem("GPT_API_KEY", apiKeyInput.value);
-	apiKeyInput.value = "";
-	GPT_API_KEY = localStorage.getItem("GPT_API_KEY");
+	if (!apiKeyInput.value) {
+		return;
+	} else {
+		localStorage.setItem("GPT_API_KEY", apiKeyInput.value);
+		apiKeyInput.value = "";
+		GPT_API_KEY = localStorage.getItem("GPT_API_KEY");
+		isApiKeySaved.style.color = "green";
+		isApiKeySaved.textContent = "🟢 API key saved 🟢";
+		isApiKeySaved.style.marginLeft = "18px";
+	}
 });
 
 
@@ -137,7 +155,6 @@ function playBotResponse(responseText, language) {
 buttonSend.addEventListener('click', async function() {
 	clearConversation();
 	if (GPT_API_KEY === "" || !GPT_API_KEY) {
-		console.log("test")
 		triggerErrorApiKeyUndifined();
 	} else {
 		const userQuestion = inputQuestion.value;
@@ -170,12 +187,15 @@ buttonSend.addEventListener('click', async function() {
 				appendToConversation(gptTag);
 				appendToConversation(weatherMessage);
 			} else { 
-				triggerChatGPT(userQuestion);
+				await triggerChatGPT(userQuestion);
 			}
 		} else {
 			const errorMessage = createErrorMessage("An Error has occured. Please try again.");
+			const gptTag = createGptTag();
+			appendToConversation(gptTag);
 			appendToConversation(errorMessage);
 		}
+		countUserquestion();
 	}
 });
 
@@ -183,20 +203,17 @@ buttonSend.addEventListener('click', async function() {
 // Counter to track the number of questions asked
 let questionCounter = 0;
 
-// Event listener for send button
-buttonSend.addEventListener('click', async function() {
-    // Increment the question counter
-    questionCounter++;
+function countUserquestion() {
+	questionCounter++;
 
-    // Log the user question in the console
-    console.log(`User Question ${questionCounter}: ${inputQuestion.value}`);
+	// Log the user question in the console
+	console.log(`User Question ${questionCounter}: ${inputQuestion.value}`);
 
-    if (questionCounter % 3 === 0) {
-        // Clear the console after every third question
-        console.clear();
-    }
-});
-
+	if (questionCounter % 3 === 0) {
+		// Clear the console after every third question
+		console.clear();
+	}
+}
 
 function triggerErrorApiKeyUndifined() {
 	const errorMessage = createErrorMessage("You need to save your API key in the settings menu before you can talk to the bot.");
@@ -287,7 +304,7 @@ function createWeatherAnswer(weatherData) {
 // Function to trigger ChatGPT with user's input and selected language
 async function triggerChatGPT(userInput) {
     clearConversation();
-
+	lastUserQuestion = userInput;
     const userTag = createUserTag();
     const userQuestion = createUserQuestion(userInput);
     const gptTag = createGptTag();
@@ -472,14 +489,20 @@ function createUserQuestion(userInput) {
 
 
 
+/// --------------- Save To File Functions --------------- ///
+
+
+// Event listener for the "Save to File" button
+saveToFileButton.addEventListener('click', function() {
+	saveUserQuestionsToFile()
+});
 
 // Function to log the user question in the console and save it to a .txt file
 function saveUserQuestionsToFile() {
-    const userQuestion = inputQuestion.value; // Get the user input directly from the input field
 
-    if (userQuestion) {
+    if (lastUserQuestion) {
         // Create a Blob containing the user question as a .txt file
-        const blob = new Blob([userQuestion], { type: 'text/plain' });
+        const blob = new Blob([lastUserQuestion], { type: 'text/plain' });
 
         // Use FileReader to read the Blob as a data URL
         const reader = new FileReader();
@@ -491,10 +514,9 @@ function saveUserQuestionsToFile() {
             downloadLink.click();
         };
         reader.readAsDataURL(blob);
+		lastUserQuestion = "";
     } else {
         console.error('No user question found to save.');
     }
 }
 
-// Event listener for the "Save to File" button
-// saveToFileButton.addEventListener('click', saveUserQuestionsToFile);
