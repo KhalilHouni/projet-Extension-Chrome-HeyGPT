@@ -40,12 +40,12 @@ apiKeySaveButton.addEventListener('click', function() {
 	GPT_API_KEY = localStorage.getItem("GPT_API_KEY");
 	if (GPT_API_KEY) {
 		isApiKeySaved.style.color = "green";
-		isApiKeySaved.textContent = "🟢 API key saved 🟢";
+		isApiKeySaved.textContent = "🟢 API key saved";
 		isApiKeySaved.style.marginLeft = "18px";
 	} else {
 		isApiKeySaved.style.color = "red";
-        isApiKeySaved.textContent = "❗️No API Key Saved❗️";
-        isApiKeySaved.style.marginLeft = "13px";
+        isApiKeySaved.textContent = "❗️No API Key Saved";
+        isApiKeySaved.style.marginLeft = "8px";
 	}
 });
 
@@ -136,14 +136,6 @@ apiKeySaveButton.addEventListener('click', function() {
 	}
 });
 
-// Function to press the button send with the key enter
-document.addEventListener('keydown', function(event) {
-    if (event.key === 'Enter') {
-        event.preventDefault();
-        const clickEvent = new Event('click');
-        buttonSend.dispatchEvent(clickEvent);
-    }
-});
 
 // -------- Speech Synthesis Functions -------- //
 
