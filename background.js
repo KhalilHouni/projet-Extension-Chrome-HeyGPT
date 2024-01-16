@@ -18,8 +18,14 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     }
 });
 
-
-
+// Listen for messages from the popup script to do YouTube search
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+    if (request.action === 'performYouTubeSearch') {
+        const query = request.query;
+        // Perform the YouTube search using the actual query
+        chrome.tabs.create({ url: `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}` });
+    }
+});
 
 chrome.runtime.onInstalled.addListener(function(details) {
     console.log("onInstalled event triggered", details);
@@ -30,14 +36,13 @@ chrome.runtime.onInstalled.addListener(function(details) {
     }
 });
 
-
-chrome.tabCapture.capture({ audio: true }, (stream) => {
-	// Continue to play the captured audio to the user.
-	console.log("prout");
-	const output = new AudioContext();
-	const source = output.createMediaStreamSource(stream);
-	source.connect(output.destination);
-	console.log(source);
-	// TODO: Do something with the stream (e.g record it)
-});
-
+// Commented out the unnecessary code
+// chrome.tabCapture.capture({ audio: true }, (stream) => {
+//     // Continue to play the captured audio to the user.
+//     console.log("prout");
+//     const output = new AudioContext();
+//     const source = output.createMediaStreamSource(stream);
+//     source.connect(output.destination);
+//     console.log(source);
+//     // TODO: Do something with the stream (e.g record it)
+// });
