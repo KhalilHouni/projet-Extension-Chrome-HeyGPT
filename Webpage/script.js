@@ -33,12 +33,6 @@ const isApiKeySaved = document.getElementById('isApiKeySaved');
 
 // When the page is loaded print welcome message
 document.addEventListener('DOMContentLoaded', function() {
-    var welcome = document.createElement('p');
-	welcome.textContent = "Welcome, I am Hey GPT. Ask me any question, either orally or textually. I can do all same thing as my extension but I can do speech to text with the mic button below.  I was made with ❤️ by Khalil, Maud, and Rémy.";
-	var gptTag = createGptTag();
-	convArea.appendChild(gptTag);
-	convArea.appendChild(welcome);
-
 	if (GPT_API_KEY) {
 		isApiKeySaved.style.color = "green";
 		isApiKeySaved.textContent = "🟢 API key saved 🟢";
@@ -96,15 +90,17 @@ settingsButton.addEventListener('click', function() {
 
 // Event listener for save API key button
 apiKeySaveButton.addEventListener('click', function() {
-	if (!apiKeyInput.value) {
-		return;
-	} else {
-		localStorage.setItem("GPT_API_KEY", apiKeyInput.value);
-		apiKeyInput.value = "";
-		GPT_API_KEY = localStorage.getItem("GPT_API_KEY");
+	localStorage.setItem("GPT_API_KEY", apiKeyInput.value);
+	apiKeyInput.value = "";
+	GPT_API_KEY = localStorage.getItem("GPT_API_KEY");
+	if (GPT_API_KEY) {
 		isApiKeySaved.style.color = "green";
 		isApiKeySaved.textContent = "🟢 API key saved 🟢";
 		isApiKeySaved.style.marginLeft = "18px";
+	} else {
+		isApiKeySaved.style.color = "red";
+        isApiKeySaved.textContent = "❗️No API Key Saved❗️";
+        isApiKeySaved.style.marginLeft = "13px";
 	}
 });
 

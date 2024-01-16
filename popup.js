@@ -34,17 +34,18 @@ const isApiKeySaved = document.getElementById('isApiKeySaved');
 
 
 // When the page is loaded print welcome message
-document.addEventListener('DOMContentLoaded', function() {
-    var welcome = document.createElement('p');
-	welcome.textContent = "Welcome, I am Hey GPT. Ask me any question, either orally or textually, I will provide the best answer. By default I will answer you with speech synthesis, you can disable that below with mute button, moreover you can choose the language of your choice for TTS with the languages menu. I can tell yout the actual weather in any city in the world, use : \'weather\' + city name. Also, I can do Google or Youtube search with : \'search on google(or youtube)\' + your search, or \'search on google pictures of\' + your search, for images search. I was made with ❤️ by Khalil, Maud, and Rémy.";
-	var gptTag = createGptTag();
-	convArea.appendChild(gptTag);
-	convArea.appendChild(welcome);
-
+apiKeySaveButton.addEventListener('click', function() {
+	localStorage.setItem("GPT_API_KEY", apiKeyInput.value);
+	apiKeyInput.value = "";
+	GPT_API_KEY = localStorage.getItem("GPT_API_KEY");
 	if (GPT_API_KEY) {
 		isApiKeySaved.style.color = "green";
-		isApiKeySaved.textContent = "🟢 API key saved";
-		isApiKeySaved.style.marginLeft = "20px";
+		isApiKeySaved.textContent = "🟢 API key saved 🟢";
+		isApiKeySaved.style.marginLeft = "18px";
+	} else {
+		isApiKeySaved.style.color = "red";
+        isApiKeySaved.textContent = "❗️No API Key Saved❗️";
+        isApiKeySaved.style.marginLeft = "13px";
 	}
 });
 
