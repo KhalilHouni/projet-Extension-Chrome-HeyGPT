@@ -307,9 +307,10 @@ function createLookingMessage() {
 }
 
 // Append in conv area error message
-function createErrorMessage() {
+function createErrorMessage(message) {
 	const errorMessage = document.createElement('p');
-	errorMessage.textContent = "An Error has occured. Please try again.";
+	errorMessage.textContent = message;
+	return errorMessage;
 }
 
 
@@ -376,6 +377,7 @@ function createUserTag() {
 function createUserQuestion(userInput) {
     const userQuestion = document.createElement('p');
     userQuestion.textContent = userInput;
+	lastUserQuestion = userInput;
     inputQuestion.value = "";
     return userQuestion;
 }
