@@ -171,8 +171,7 @@ buttonSend.addEventListener('click', async function() {
         console.clear();
     }
 
-    // Rest of the existing code for handling user questions
-    // ...
+   
 });
 
 
