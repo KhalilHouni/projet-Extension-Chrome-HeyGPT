@@ -16,6 +16,7 @@ import { getWeatherInfo, createWeatherAnswer } from "./weather.js";
 import { triggerChatGPT } from "./gpt.js";
 import { stopSpeechSynthesis } from "./speechSynthesis.js";
 
+
 // ---------- Talk To The Bot Functions ---------- //
 export async function whatBotMustDo() {
 	clearConversation();
