@@ -28,3 +28,20 @@ export function performGoogleImagesSearch(query) {
     stopSpeechSynthesis();
     chrome.runtime.sendMessage({ action: 'performGoogleImagesSearch', query: searchQuery });
 }
+
+
+
+// /// --------------- Youtube Search Functions --------------- ///
+
+// Function to perform the Youtube search with the actual query
+export function performYouTubeSearch(query) {
+    chrome.runtime.sendMessage({ action: 'performYouTubeSearch', query: query });
+}
+
+
+// /// --------------- Wikipedia Search Functions --------------- ///
+
+// Function to perform the Wikipedia search with the actual query
+export function performWikipediaSearch(query) {
+    chrome.runtime.sendMessage({ action: 'performWikipediaSearch', query: query });
+}
