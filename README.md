@@ -39,9 +39,11 @@ HeyGPT supports conversations in multiple languages, including English, French, 
 
 ## Contributors
 
-- Khalil Houni 
-- Remy Cassagne 
-- Maud Hué
+Made with ❤️ by :
+
+  - Khalil Houni https://github.com/KhalilHouni
+  - Remy Cassagne https://github.com/https-remy
+  - Maud Hué https://github.com/Maud6930
 
 ## Acknowledgments
 
