@@ -6,18 +6,18 @@ import { isVoiceEnabled,
 	appendToConversation, 
 	scrollToBottom, 
 	clearConversation, 
-	lastUserQuestion } from "./utils.js";
+	modifyLastUserQuestion} from "./utils.js";
 
 import { playBotResponse } from "./speechSynthesis.js";
 
-// const URL = 'https://api.openai.com/v1/completions';
+const URL = 'https://api.openai.com/v1/completions';
 
 /// --------------- ChatGPT Functions --------------- ///
 
 // Function to trigger ChatGPT with user's input and selected language
 export async function triggerChatGPT(userInput) {
     clearConversation();
-	lastUserQuestion = userInput;
+	modifyLastUserQuestion(userInput);
     const userTag = createUserTag();
     const userQuestion = createUserQuestion(userInput);
     const gptTag = createGptTag();

@@ -13,19 +13,20 @@ import { buttonSend,
 		GPT_API_KEY,
 		voiceControlCheckbox,
 		isVoiceEnabled,
-		modifyIsVoiceEnabled } from "./src/utils.js";
+		modifyIsVoiceEnabled,
+		settingsButton, settingsMenu,
+		apiKeySaveButton, apiKeyInput,
+		saveToFileButton, 
+		modifyGptApiKey} from "./src/utils.js";
 
-// import { saveUserQuestionsToFile } from './src/saveToFile.js'
+import { saveUserQuestionsToFile } from './src/saveToFile.js'
 
-// import { whatBotMustDo } from "./src/talkWithBot.js";
-
-
+import { whatBotMustDo } from "./src/talkWithBot.js";
 
 ///////////////////////////////////////////////////////////////
 
 
 const isApiKeySaved = document.getElementById('isApiKeySaved');
-
 
 
 
@@ -72,42 +73,42 @@ voiceControlCheckbox.addEventListener('change', function() {
 });
 
 
+
 /// ------ Settings Menu Display ------ ///
-// settingsButton.addEventListener('click', function() {
-// 	console.log(settingsMenu.style.display);
-// 	if (settingsMenu.style.display === 'block') {
-//     	settingsMenu.style.display = 'none';
-// 	} else {
-//     	settingsMenu.style.display = 'block';
-//     }
-// });
+settingsButton.addEventListener('click', function() {
+	if (settingsMenu.style.display === 'block') {
+    	settingsMenu.style.display = 'none';
+	} else {
+    	settingsMenu.style.display = 'block';
+    }
+});
 
 
 /// ------ Save API Key Trigger ------ ///
-// apiKeySaveButton.addEventListener('click', function() {
-// 	localStorage.setItem("GPT_API_KEY", apiKeyInput.value);
-// 	apiKeyInput.value = "";
-// 	GPT_API_KEY = localStorage.getItem("GPT_API_KEY");  // change to api_key here
-// 	if (GPT_API_KEY) {
-// 		isApiKeySaved.style.color = "green";
-// 		isApiKeySaved.textContent = "🟢 API key saved 🟢";
-// 		isApiKeySaved.style.marginLeft = "18px";
-// 	} else {
-// 		isApiKeySaved.style.color = "red";
-//         isApiKeySaved.textContent = "❗️No API Key Saved❗️";
-//         isApiKeySaved.style.marginLeft = "13px";
-// 	}
-// });
+apiKeySaveButton.addEventListener('click', function() {
+	localStorage.setItem("GPT_API_KEY", apiKeyInput.value);
+	apiKeyInput.value = "";
+	modifyGptApiKey(localStorage.getItem("GPT_API_KEY"));  // change to api_key here
+	if (GPT_API_KEY) {
+		isApiKeySaved.style.color = "green";
+		isApiKeySaved.textContent = "🟢 API key saved 🟢";
+		isApiKeySaved.style.marginLeft = "18px";
+	} else {
+		isApiKeySaved.style.color = "red";
+        isApiKeySaved.textContent = "❗️No API Key Saved❗️";
+        isApiKeySaved.style.marginLeft = "13px";
+	}
+});
 
 /// ------ Send to the bot Trigger ------ ///
-// buttonSend.addEventListener('click', async function() {
-// 	await whatBotMustDo();
-// });
+buttonSend.addEventListener('click', async function() {
+	await whatBotMustDo();
+});
 
 /// ------ Save To File Trigger ------ ///
-// saveToFileButton.addEventListener('click', function() {
-// 	saveUserQuestionsToFile()
-// });
+saveToFileButton.addEventListener('click', function() {
+	saveUserQuestionsToFile()
+});
 
 
 /// ------ Start/Stop record with mic button ------ ///

@@ -8,12 +8,12 @@ export const deleteButton = document.getElementById('delete-button');
 
 export const micCheckbox = document.getElementById('mic-checkbox');
 
-// export const saveToFileButton = document.getElementById('saveToFile');
+export const saveToFileButton = document.getElementById('saveToFile');
 
-// export const settingsButton = document.getElementById('settingsButton');
-// export const settingsMenu = document.getElementById('settingsMenu');
-// export const apiKeySaveButton = document.getElementById('apiKeySave');
-// export const apiKeyInput = document.getElementById('apiKeyInput');
+export const settingsButton = document.getElementById('settingsButton');
+export const settingsMenu = document.getElementById('settingsMenu');
+export const apiKeySaveButton = document.getElementById('apiKeySave');
+export const apiKeyInput = document.getElementById('apiKeyInput');
 
 export const micSwitch = document.getElementById('switch');
 export const micOn = document.getElementById('mic-on');
@@ -22,6 +22,14 @@ export let GPT_API_KEY = localStorage.getItem('GPT_API_KEY');
 export let isVoiceEnabled = true;
 export let recognition;
 export let lastUserQuestion;
+
+export function modifyLastUserQuestion(value) {
+	lastUserQuestion = value;
+}
+
+export function modifyGptApiKey(value) {
+    GPT_API_KEY = value;
+}
 
 export function modifyIsVoiceEnabled() { 
 	isVoiceEnabled = isVoiceEnabled? false : true; 
@@ -37,18 +45,18 @@ export function defineRecognition() {
 // /// --------------- Global Functions --------------- ///
 
 // // Function to create "looking on the browser..." message
-// export function createLookingMessage() {
-//     const lookingMessage = document.createElement('p');
-//     lookingMessage.textContent = "Looking on the browser...";
-//     return lookingMessage;
-// }
+export function createLookingMessage() {
+    const lookingMessage = document.createElement('p');
+    lookingMessage.textContent = "Looking on the browser...";
+    return lookingMessage;
+}
 
 // // Append in conv area error message
-// export function createErrorMessage(message) {
-// 	const errorMessage = document.createElement('p');
-// 	errorMessage.textContent = message;
-// 	return errorMessage;
-// }
+export function createErrorMessage(message) {
+	const errorMessage = document.createElement('p');
+	errorMessage.textContent = message;
+	return errorMessage;
+}
 
 // // Function to create user tag
 export function createUserTag() {
@@ -61,7 +69,7 @@ export function createUserTag() {
 export function createUserQuestion(userInput) {
     const userQuestion = document.createElement('p');
     userQuestion.textContent = userInput;
-	lastUserQuestion = userInput;
+	modifyLastUserQuestion(userInput);
     inputQuestion.value = "";
     return userQuestion;
 }
@@ -86,5 +94,5 @@ export function scrollToBottom() {
 // // Function to clear conversation
 export function clearConversation() {
     convArea.innerHTML = "";
-	lastUserQuestion = "";
+	modifyLastUserQuestion("");
 }

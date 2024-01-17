@@ -7,7 +7,7 @@ let synthesis;
 
 export function startSpeechSynthesis() {
     if (!synthesis) {
-        synthesis = new SpeechSynthesis();
+        synthesis = new webkitSpeechSynthesis();
         synthesis.continuous = false;
         synthesis.lang = "fr-FR";
         synthesis.onresult = function(event) {
