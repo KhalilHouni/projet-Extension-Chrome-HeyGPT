@@ -1,29 +1,23 @@
 ///////////////////////////////////////////////////////////////
 
 import { stopAudio, 
-	startSpeechSynthesis,
-	stopSpeechSynthesis } from "./src/speechSynthesis.js";
+		startSpeechSynthesis, 
+		stopSpeechSynthesis } from "./src/speechSynthesis.js";
 
-import { setupMicrophone, 
-	toggleMicOff, 
-	toggleMicOn, 
-	stopMicrophone  } from "./src/speechToText.js";
+import { toggleRecognition  } from "./src/speechToText.js";
 
-import { clearConversation, 
-	GPT_API_KEY as api_key,
+import { buttonSend,
+		micCheckbox,
+		clearConversation,
 		deleteButton,
+		GPT_API_KEY,
 		voiceControlCheckbox,
-		settingsButton,
-		settingsMenu,
-		apiKeySaveButton,
-		apiKeyInput,
-		buttonSend,
-		saveToFileButton,
-		micCheckbox } from "./src/utils.js";
+		isVoiceEnabled,
+		modifyIsVoiceEnabled } from "./src/utils.js";
 
-import { saveUserQuestionsToFile } from './src/saveToFile.js'
+// import { saveUserQuestionsToFile } from './src/saveToFile.js'
 
-import { whatBotMustDo } from "./src/talkWithBot.js";
+// import { whatBotMustDo } from "./src/talkWithBot.js";
 
 
 
@@ -67,7 +61,8 @@ document.getElementById('stop-audio').addEventListener('click', function() {
 
 /// ------ Mute Button Trigger ------ ///
 voiceControlCheckbox.addEventListener('change', function() {
-    isVoiceEnabled = this.checked;
+	modifyIsVoiceEnabled();
+	console.log(isVoiceEnabled);
     if (isVoiceEnabled) {
         startSpeechSynthesis();
     } else {
@@ -78,64 +73,47 @@ voiceControlCheckbox.addEventListener('change', function() {
 
 
 /// ------ Settings Menu Display ------ ///
-settingsButton.addEventListener('click', function() {
-	console.log(settingsMenu.style.display);
-	if (settingsMenu.style.display === 'block') {
-    	settingsMenu.style.display = 'none';
-	} else {
-    	settingsMenu.style.display = 'block';
-    }
-});
+// settingsButton.addEventListener('click', function() {
+// 	console.log(settingsMenu.style.display);
+// 	if (settingsMenu.style.display === 'block') {
+//     	settingsMenu.style.display = 'none';
+// 	} else {
+//     	settingsMenu.style.display = 'block';
+//     }
+// });
 
 
 /// ------ Save API Key Trigger ------ ///
-apiKeySaveButton.addEventListener('click', function() {
-	localStorage.setItem("GPT_API_KEY", apiKeyInput.value);
-	apiKeyInput.value = "";
-	api_key = localStorage.getItem("GPT_API_KEY");  // change to api_key here
-	if (api_key) {
-		isApiKeySaved.style.color = "green";
-		isApiKeySaved.textContent = "🟢 API key saved 🟢";
-		isApiKeySaved.style.marginLeft = "18px";
-	} else {
-		isApiKeySaved.style.color = "red";
-        isApiKeySaved.textContent = "❗️No API Key Saved❗️";
-        isApiKeySaved.style.marginLeft = "13px";
-	}
-});
+// apiKeySaveButton.addEventListener('click', function() {
+// 	localStorage.setItem("GPT_API_KEY", apiKeyInput.value);
+// 	apiKeyInput.value = "";
+// 	GPT_API_KEY = localStorage.getItem("GPT_API_KEY");  // change to api_key here
+// 	if (GPT_API_KEY) {
+// 		isApiKeySaved.style.color = "green";
+// 		isApiKeySaved.textContent = "🟢 API key saved 🟢";
+// 		isApiKeySaved.style.marginLeft = "18px";
+// 	} else {
+// 		isApiKeySaved.style.color = "red";
+//         isApiKeySaved.textContent = "❗️No API Key Saved❗️";
+//         isApiKeySaved.style.marginLeft = "13px";
+// 	}
+// });
 
 /// ------ Send to the bot Trigger ------ ///
-buttonSend.addEventListener('click', async function() {
-	await whatBotMustDo();
-});
+// buttonSend.addEventListener('click', async function() {
+// 	await whatBotMustDo();
+// });
 
 /// ------ Save To File Trigger ------ ///
-saveToFileButton.addEventListener('click', function() {
-	saveUserQuestionsToFile()
-});
+// saveToFileButton.addEventListener('click', function() {
+// 	saveUserQuestionsToFile()
+// });
 
 
 /// ------ Start/Stop record with mic button ------ ///
-micCheckbox.addEventListener('click', async function() {
-	if (micCheckbox.checked) {
-		const recognition2 = await setupMicrophone();
-		console.log('Mic is on');
-		recognition2.start();
-		toggleMicOn();
-	} else {
-		console.log('Mic is off');
-		stopMicrophone();
-		toggleMicOff();
-	}
 
-	recognition2.onresult = (event) => {
-		const result = event.results[event.resultIndex];
-		const transcription = result[0].transcript;
-		inputQuestion.value = transcription;
-	};
-	recognition2.onerror = (event) => {
-		console.error(event.error);
-	};
+micCheckbox.addEventListener('click', async function() {
+	await toggleRecognition();
 });
 
 // Function to press the button send with the key enter

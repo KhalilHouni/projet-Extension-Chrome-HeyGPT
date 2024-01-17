@@ -3,11 +3,11 @@ import { inputQuestion } from "./utils.js";
 
 let synthesis;
 
-// -------- Speech Synthesis Functions -------- //
+// // -------- Speech Synthesis Functions -------- //
 
 export function startSpeechSynthesis() {
     if (!synthesis) {
-        synthesis = new webkitSpeechsynthesis();
+        synthesis = new SpeechSynthesis();
         synthesis.continuous = false;
         synthesis.lang = "fr-FR";
         synthesis.onresult = function(event) {
@@ -25,7 +25,7 @@ export function stopSpeechSynthesis() {
     }
 }
 
-// Function to play bot's response as speech with the selected language
+// // Function to play bot's response as speech with the selected language
 export function playBotResponse(responseText, language) {
     const languageConfig = {
         fr: 'fr-FR',
@@ -44,8 +44,7 @@ export function playBotResponse(responseText, language) {
     window.speechSynthesis.speak(utterance);
 }
 
-// Function to stop the audio
+// // Function to stop the audio
 export function stopAudio() {
     window.speechSynthesis.cancel();
 }
-
