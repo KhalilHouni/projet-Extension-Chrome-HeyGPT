@@ -244,7 +244,11 @@ buttonSend.addEventListener('click', async function() {
 				const query = userQuestion.replace('search on youtube', '').trim();
 				// Perform the YouTube search
 				chrome.runtime.sendMessage({ action: 'performYouTubeSearch', query: query });
-			} else if (
+			} else if (userQuestion.toLowerCase().includes('search on wikipedia')) {
+                const query = userQuestion.replace('search on wikipedia', '').trim();
+                // Perform the Wikipedia search
+                performWikipediaSearch(query);
+            } else if (
                 userQuestion.toLowerCase().includes("weather") ||
                 userQuestion.toLowerCase().includes("clima") ||
                 userQuestion.includes("天气") ||
