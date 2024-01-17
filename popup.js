@@ -24,7 +24,14 @@ var audioContext;
 var lastUserQuestion;
 var GPT_API_KEY = localStorage.getItem('GPT_API_KEY');
 var isVoiceEnabled = true; // Set bot's voice to "on" by default
+var recording_log = ""; // Define new log variable
 
+buttonSend.addEventListener('click', (event) => {   // When user sends a messages
+  const message = inputQuestion.value;
+  appendToConversation("User: " + message + "\n");
+  // Existing command to ask bot in the given function
+  askBotFunction(message);
+});
 
 
 // ------ On load actions ------ //
@@ -183,6 +190,24 @@ function playBotResponse(responseText, language) {
 
 // ---------- Talk To The Bot Functions ---------- //
 
+let convLog = [];
+
+function saveToLog(user, content) {
+  convLog.push({user: user, content: content});
+}
+
+function downloadConversation() {
+  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(convLog, null, 2));
+  const downloadAnchorNode = document.createElement('a');
+  downloadAnchorNode.setAttribute("href", dataStr);
+  downloadAnchorNode.setAttribute("download", "convLog.json");
+  document.body.appendChild(downloadAnchorNode); // required for firefox
+  downloadAnchorNode.click();
+  downloadAnchorNode.remove();
+}
+
+saveToFileButton.addEventListener('click', downloadConversation);
+
 // Event listener for send button
 buttonSend.addEventListener('click', async function() {
     clearConversation();
@@ -190,11 +215,14 @@ buttonSend.addEventListener('click', async function() {
 		triggerErrorApiKeyUndifined();
 	} else {
 		const userQuestion = inputQuestion.value;
+        saveToLog('User', userQuestion);
+		
 		if (userQuestion) {
 			if (shouldPerformGoogleSearch(userQuestion)) {
 				// Respond with "looking on the browser..."
 				const lookingMessage = createLookingMessage();
 				appendToConversation(lookingMessage);
+				saveToLog('Bot', 'Looking on the browser...');
 
 				// Disable ChatGPT
 				stopSpeechSynthesis();
@@ -205,6 +233,7 @@ buttonSend.addEventListener('click', async function() {
 				// Respond with "looking on the browser..."
 				const lookingMessage = createLookingMessage();
 				appendToConversation(lookingMessage);
+				saveToLog('Bot', 'Looking on the browser...');
 
 				// Disable ChatGPT
 				stopSpeechSynthesis();
@@ -225,13 +254,15 @@ buttonSend.addEventListener('click', async function() {
                 const location = extractLocationFromQuestion();
                 getWeatherInfo(location);
 			} else { 
-				triggerChatGPT(userQuestion);
+				triggerChatGPT(userQuestion); // make sure to save bot response here using saveToLog('Bot', response);
 			}
+		
 		} else {
-			const errorMessage = createErrorMessage("An Error has occured. Please try again.");
+			const errorMessage = "An Error has occured. Please try again.";
 			const gptTag = createGptTag();
 			appendToConversation(gptTag);
 			appendToConversation(errorMessage);
+			saveToLog('Bot', errorMessage);
 		}
 	}
 	countUserquestion();
@@ -354,23 +385,20 @@ function extractLocationFromQuestion() {
 // Function to trigger ChatGPT with user's input and selected language
 async function triggerChatGPT(userInput) {
     clearConversation();
-
     const userTag = createUserTag();
     const userQuestion = createUserQuestion(userInput);
     const gptTag = createGptTag();
-
     appendToConversation(userTag);
     appendToConversation(userQuestion);
     appendToConversation(gptTag);
-
-    const language = document.getElementById('language-select').value; // Get the selected language
-
+    const language = document.getElementById('language-select').value;
     const gptAnswer = await askQuestion(userInput, language);
     appendToConversation(gptAnswer);
     if (isVoiceEnabled) {
-        playBotResponse(gptAnswer.textContent, language); // Pass the selected language to the playBotResponse function
+        playBotResponse(gptAnswer.textContent, language);
     }
     scrollToBottom();
+    saveToLog('User', userInput); // save to log after user asks
 }
 
 
@@ -408,7 +436,7 @@ function scrollToBottom() {
 }
 
 // Function to call ChatGPT's API to ask the user question
-async function askQuestion(userQuestion) {
+async function askQuestion(userQuestion, language) {
     const headers = {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${GPT_API_KEY}`,
@@ -430,14 +458,16 @@ async function askQuestion(userQuestion) {
             body: body,
         });
 
-        const answer = await createAnswerGpt(response);
+        const data = await response.json();
+        const answer = document.createElement('p');
+        answer.textContent = data.choices[0].text;
+        saveToLog('Bot', data.choices[0].text.trim()); // save bot answer to log here
         return answer;
     } catch (error) {
         console.error('Error calling ChatGPT API:', error);
         return null;
     }
 }
-
 // Function to create bot's response element
 async function createAnswerGpt(response) {
     const data = await response.json();
@@ -445,6 +475,7 @@ async function createAnswerGpt(response) {
     answer.textContent = data.choices[0].text;
     return answer;
 }
+
 
 
 
