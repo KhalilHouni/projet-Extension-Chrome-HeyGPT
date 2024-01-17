@@ -10,7 +10,7 @@ import { setupMicrophone,
 	stopMicrophone  } from "./src/speechToText.js";
 
 import { clearConversation, 
-		GPT_API_KEY,
+	GPT_API_KEY as api_key,
 		deleteButton,
 		voiceControlCheckbox,
 		settingsButton,
@@ -92,8 +92,8 @@ settingsButton.addEventListener('click', function() {
 apiKeySaveButton.addEventListener('click', function() {
 	localStorage.setItem("GPT_API_KEY", apiKeyInput.value);
 	apiKeyInput.value = "";
-	GPT_API_KEY = localStorage.getItem("GPT_API_KEY");
-	if (GPT_API_KEY) {
+	api_key = localStorage.getItem("GPT_API_KEY");  // change to api_key here
+	if (api_key) {
 		isApiKeySaved.style.color = "green";
 		isApiKeySaved.textContent = "🟢 API key saved 🟢";
 		isApiKeySaved.style.marginLeft = "18px";
