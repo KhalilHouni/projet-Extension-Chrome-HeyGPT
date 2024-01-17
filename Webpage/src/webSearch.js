@@ -1,3 +1,5 @@
+import { stopSpeechSynthesis } from "./speechSynthesis.js";
+
 // /// --------------- Google Search Functions --------------- ///
 
 // // Function to check if the user wants to perform a Google search

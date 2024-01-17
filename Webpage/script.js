@@ -6,18 +6,13 @@ import { stopAudio,
 
 import { toggleRecognition  } from "./src/speechToText.js";
 
-import { buttonSend,
-		micCheckbox,
-		clearConversation,
-		deleteButton,
-		GPT_API_KEY,
-		voiceControlCheckbox,
-		isVoiceEnabled,
-		modifyIsVoiceEnabled,
+import { buttonSend, micCheckbox,
+		clearConversation, deleteButton,
+		GPT_API_KEY, voiceControlCheckbox,
+		isVoiceEnabled, modifyIsVoiceEnabled,
 		settingsButton, settingsMenu,
 		apiKeySaveButton, apiKeyInput,
-		saveToFileButton, 
-		modifyGptApiKey} from "./src/utils.js";
+		saveToFileButton, modifyGptApiKey} from "./src/utils.js";
 
 import { saveUserQuestionsToFile } from './src/saveToFile.js'
 

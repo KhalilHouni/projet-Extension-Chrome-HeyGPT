@@ -4,7 +4,8 @@ import { clearConversation,
 	createErrorMessage, 
 	createUserQuestion,
 	createUserTag, GPT_API_KEY,
-	inputQuestion } from "./utils.js";
+	inputQuestion,
+	createLookingMessage } from "./utils.js";
 
 import { shouldPerformGoogleSearch,
 		performGoogleSearch,
