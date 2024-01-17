@@ -1,7 +1,7 @@
 import { triggerChatGPT } from "./gpt.js";
 import { inputQuestion } from "./utils.js";
 
-var synthesis;
+let synthesis;
 
 // -------- Speech Synthesis Functions -------- //
 
@@ -48,3 +48,4 @@ export function playBotResponse(responseText, language) {
 export function stopAudio() {
     window.speechSynthesis.cancel();
 }
+

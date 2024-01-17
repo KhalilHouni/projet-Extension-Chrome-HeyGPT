@@ -1,18 +1,8 @@
 import { triggerChatGPT } from "./gpt.js";
 import { stopSpeechSynthesis } from "./speechSynthesis.js";
 import { getWeatherInfo, createWeatherAnswer } from "./weather.js";
-
-import { appendToConversation, 
-	createGptTag, 
-	createErrorMessage, 
-	inputQuestion} from "./utils.js";
-
-import { shouldPerformGoogleSearch, 
-	shouldPerformGoogleImagesSearch,
-	performGoogleSearch,
-	performGoogleImagesSearch } from "./webSearch.js";
-
-
+import { shouldPerformGoogleSearch, shouldPerformGoogleImagesSearch, performGoogleSearch, performGoogleImagesSearch } from "./webSearch.js";
+import { clearConversation, createLookingMessage, createGptTag, createErrorMessage, inputQuestion, GPT_API_KEY } from "./utils.js";
 // ---------- Talk To The Bot Functions ---------- //
 export async function whatBotMustDo() {
 	clearConversation();

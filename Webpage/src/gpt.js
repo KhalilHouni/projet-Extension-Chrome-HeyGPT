@@ -1,13 +1,5 @@
-import { isVoiceEnabled, GPT_API_KEY } from "./utils.js";
+import { isVoiceEnabled, GPT_API_KEY, createUserTag, createUserQuestion, createGptTag, appendToConversation, scrollToBottom, clearConversation, lastUserQuestion } from "./utils.js";
 import { playBotResponse } from "./speechSynthesis.js";
-
-import { createUserTag, 
-	createUserQuestion, 
-	createGptTag, 
-	appendToConversation, 
-	scrollToBottom, 
-	clearConversation } from "./utils.js";
-
 
 const URL = 'https://api.openai.com/v1/completions';
 
