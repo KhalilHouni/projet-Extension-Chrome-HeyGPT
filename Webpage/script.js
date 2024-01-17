@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		isApiKeySaved.textContent = "🟢 API key saved 🟢";
 		isApiKeySaved.style.marginLeft = "18px";
 	}
+	initializeLanguage();
 });
 
 
@@ -93,6 +94,13 @@ apiKeySaveButton.addEventListener('click', function() {
         isApiKeySaved.textContent = "❗️No API Key Saved❗️";
         isApiKeySaved.style.marginLeft = "13px";
 	}
+	setTimeout(function () {
+		if (settingsMenu.style.display === 'block') {
+			settingsMenu.style.display = 'none';
+		} else {
+			settingsMenu.style.display = 'block';
+		}
+	},500);
 });
 
 /// ------ Send to the bot Trigger ------ ///
@@ -120,3 +128,26 @@ document.addEventListener('keydown', function(event) {
         buttonSend.dispatchEvent(clickEvent);
     }
 });
+
+
+/// ------ Initialize Language for TTS and Weather ------ ///
+
+function initializeLanguage() {
+    console.log('Initializing language...');
+
+    const storedLanguage = getSelectedLanguage();
+    console.log('Stored language:', storedLanguage);
+
+    const languageDropdown = document.getElementById('language-select');
+    console.log('Language dropdown:', languageDropdown);
+
+    // Définir la valeur du menu déroulant
+    languageDropdown.value = storedLanguage;
+
+    console.log('Language set to:', storedLanguage);
+
+}
+
+function getSelectedLanguage() {
+    return localStorage.getItem('selectedLanguage'); 
+}

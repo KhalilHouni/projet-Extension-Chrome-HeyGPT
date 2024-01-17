@@ -26,11 +26,13 @@ export async function triggerChatGPT(userInput) {
     appendToConversation(userQuestion);
     appendToConversation(gptTag);
 
-    const language = document.getElementById('language-select').value; // Get the selected language
-
     const gptAnswer = await askQuestion(userInput);
     appendToConversation(gptAnswer);
+
     if (isVoiceEnabled) {
+		const language = document.getElementById('language-select').value; // Get the selected language
+
+		setSelectedLanguage(language);
         playBotResponse(gptAnswer.textContent, language); // Pass the selected language to the playBotResponse function
     }
     scrollToBottom();
@@ -73,4 +75,9 @@ async function createAnswerGpt(response) {
     const answer = document.createElement('p');
     answer.textContent = data.choices[0].text;
     return answer;
+}
+
+// Fonction pour récupérer la langue depuis le stockage local
+function setSelectedLanguage(language) {
+    localStorage.setItem('selectedLanguage', language);
 }

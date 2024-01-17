@@ -49,7 +49,7 @@ export async function whatBotMustDo() {
 				// Perform the YouTube search
 				chrome.runtime.sendMessage({ action: 'performYouTubeSearch', query: query });
 			} else if (userQuestion.includes("weather")) {
-				const location = userQuestion.replace("weather", "").trim();
+                const location = extractLocationFromQuestion();
 				const weatherData = await getWeatherInfo(location);
 				const weatherMessage = createWeatherAnswer(weatherData);
 				const gptTag = createGptTag();
@@ -98,4 +98,11 @@ function countUserquestion() {
 		// Clear the console after every third question
 		console.clear();
 	}
+}
+
+function extractLocationFromQuestion() {
+    let locationSp = inputQuestion.value.split(' ');
+    let locationFin= locationSp[locationSp.length - 1];
+    console.log(locationFin);
+    return locationFin
 }

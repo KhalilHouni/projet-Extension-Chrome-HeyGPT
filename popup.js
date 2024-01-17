@@ -165,20 +165,6 @@ function stopSpeechSynthesis() {
         synthesis.stop();
     }
 }
-// Function to play bot's response as speech with the selected language
-function setSelectedLanguage(language) {
-    localStorage.setItem('selectedLanguage', language);
-}
-
-// Fonction pour récupérer la langue depuis le stockage local
-function setSelectedLanguage(language) {
-    localStorage.setItem('selectedLanguage', language);
-}
-
-// Fonction pour récupérer la langue depuis le stockage local
-function getSelectedLanguage() {
-    return localStorage.getItem('selectedLanguage'); 
-}
 
 // Fonction pour jouer la réponse du bot en utilisant la langue sélectionnée
 function playBotResponse(responseText) {
@@ -201,24 +187,6 @@ function playBotResponse(responseText) {
     window.speechSynthesis.speak(utterance);
 }
 
-function initializeLanguage() {
-    console.log('Initializing language...');
-    
-    const storedLanguage = getSelectedLanguage();
-    console.log('Stored language:', storedLanguage);
-
-    const languageDropdown = document.getElementById('language-select');
-    console.log('Language dropdown:', languageDropdown);
-
-    // Définir la valeur du menu déroulant
-    languageDropdown.value = storedLanguage;
-
-    console.log('Language set to:', storedLanguage);
-
-}
-
-
-window.addEventListener('load', initializeLanguage);
 
 
 // ---------- Talk To The Bot Functions ---------- //
@@ -409,12 +377,7 @@ function getWeatherInfo(location) {
  });
 }
 
-function extractLocationFromQuestion() {
-    let locationSp = inputQuestion.value.split(' ');
-    let locationFin= locationSp[locationSp.length - 1];
-    console.log(locationFin);
-    return locationFin
-     }
+
 
 
 /// --------------- ChatGPT Functions --------------- ///
