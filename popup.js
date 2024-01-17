@@ -165,9 +165,25 @@ function stopSpeechSynthesis() {
         synthesis.stop();
     }
 }
-
 // Function to play bot's response as speech with the selected language
-function playBotResponse(responseText, language) {
+function setSelectedLanguage(language) {
+    localStorage.setItem('selectedLanguage', language);
+}
+
+// Fonction pour récupérer la langue depuis le stockage local
+function setSelectedLanguage(language) {
+    localStorage.setItem('selectedLanguage', language);
+}
+
+// Fonction pour récupérer la langue depuis le stockage local
+function getSelectedLanguage() {
+    return localStorage.getItem('selectedLanguage'); 
+}
+
+// Fonction pour jouer la réponse du bot en utilisant la langue sélectionnée
+function playBotResponse(responseText) {
+    const selectedLanguage = getSelectedLanguage() || 'en'; // Utiliser 'en' si aucune langue sélectionnée
+
     const languageConfig = {
         fr: 'fr-FR',
         en: 'en-US',
@@ -175,17 +191,34 @@ function playBotResponse(responseText, language) {
         zh: 'cmn-Hans-CN', // Mandarin
         ar: 'ar-SA',      // Arabic
         pt: 'pt-PT'       // Portuguese
-      // more languages can be added here
+        // plus de langues peuvent être ajoutées ici
     };
 
-    const selectedLanguage = languageConfig[language] || 'en-US'; // Default to English if language is not found
+    const selectedSpeechLanguage = languageConfig[selectedLanguage] || 'en-US';
 
     const utterance = new SpeechSynthesisUtterance(responseText);
-    utterance.lang = selectedLanguage; // Set the language for the speech synthesis
+    utterance.lang = selectedSpeechLanguage; // Définir la langue pour la synthèse vocale
     window.speechSynthesis.speak(utterance);
 }
 
+function initializeLanguage() {
+    console.log('Initializing language...');
+    
+    const storedLanguage = getSelectedLanguage();
+    console.log('Stored language:', storedLanguage);
 
+    const languageDropdown = document.getElementById('language-select');
+    console.log('Language dropdown:', languageDropdown);
+
+    // Définir la valeur du menu déroulant
+    languageDropdown.value = storedLanguage;
+
+    console.log('Language set to:', storedLanguage);
+
+}
+
+
+window.addEventListener('load', initializeLanguage);
 
 
 // ---------- Talk To The Bot Functions ---------- //
@@ -386,7 +419,6 @@ function extractLocationFromQuestion() {
 
 /// --------------- ChatGPT Functions --------------- ///
 
-// Function to trigger ChatGPT with user's input and selected language
 async function triggerChatGPT(userInput) {
     clearConversation();
     const userTag = createUserTag();
@@ -395,12 +427,20 @@ async function triggerChatGPT(userInput) {
     appendToConversation(userTag);
     appendToConversation(userQuestion);
     appendToConversation(gptTag);
-    const language = document.getElementById('language-select').value;
+    
+    const languageDropdown = document.getElementById('language-select');
+    const language = languageDropdown.value;
+
+    // Enregistrez la langue sélectionnée dans le local storage
+    setSelectedLanguage(language);
+
     const gptAnswer = await askQuestion(userInput, language);
     appendToConversation(gptAnswer);
+    
     if (isVoiceEnabled) {
-        playBotResponse(gptAnswer.textContent, language);
+        playBotResponse(gptAnswer.textContent);
     }
+    
     scrollToBottom();
     saveToLog('User', userInput); // save to log after user asks
 }
