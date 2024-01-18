@@ -24,3 +24,11 @@ export function createWeatherAnswer(weatherData) {
 	answerWeather.textContent = weatherData;
 	return answerWeather;
 }
+
+export function containWeatherWord(userQuestion) {
+	return (userQuestion.toLowerCase().includes("weather") ||
+	userQuestion.toLowerCase().includes("clima") ||
+	userQuestion.includes("天气") ||
+	userQuestion.includes("الطقس") ||
+	userQuestion.toLowerCase().includes("météo"));
+}

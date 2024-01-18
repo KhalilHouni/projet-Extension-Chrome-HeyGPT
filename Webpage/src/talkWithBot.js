@@ -12,7 +12,9 @@ import { shouldPerformGoogleSearch,
 		shouldPerformGoogleImagesSearch,
 		performGoogleImagesSearch } from "./webSearch.js"
 
-import { getWeatherInfo, createWeatherAnswer } from "./weather.js";
+import { getWeatherInfo, createWeatherAnswer, 
+	containWeatherWord } from "./weather.js";
+
 import { triggerChatGPT } from "./gpt.js";
 import { stopSpeechSynthesis } from "./speechSynthesis.js";
 
@@ -49,7 +51,7 @@ export async function whatBotMustDo() {
 				const query = userQuestion.replace('search on youtube', '').trim();
 				// Perform the YouTube search
 				chrome.runtime.sendMessage({ action: 'performYouTubeSearch', query: query });
-			} else if (userQuestion.includes("weather")) {
+			} else if (containWeatherWord(userQuestion)) {
                 const location = extractLocationFromQuestion();
 				const weatherData = await getWeatherInfo(location);
 				const weatherMessage = createWeatherAnswer(weatherData);
