@@ -15,8 +15,8 @@ import { shouldPerformGoogleSearch,
 import { getWeatherInfo, createWeatherAnswer, 
 	containWeatherWord } from "./weather.js";
 
-import { triggerChatGPT } from "./gpt.js";
-import { stopSpeechSynthesis } from "./speechSynthesis.js";
+import { triggerChatGPT, setSelectedLanguage } from "./gpt.js";
+import { stopSpeechSynthesis, playBotResponse } from "./speechSynthesis.js";
 
 
 // ---------- Talk To The Bot Functions ---------- //
@@ -53,18 +53,23 @@ export async function whatBotMustDo() {
 				chrome.runtime.sendMessage({ action: 'performYouTubeSearch', query: query });
 			} else if (containWeatherWord(userQuestion)) {
 
+				const language = document.getElementById('language-select').value; // Get the selected language
+
                 const location = extractLocationFromQuestion();
 				const weatherData = await getWeatherInfo(location);
-				const weatherMessage = createWeatherAnswer(weatherData);
 
 				const userTag = createUserTag();
                 const userWeatherAsk = createUserQuestion(userQuestion);
 				const gptTag = createGptTag();
+				const weatherMessage = createWeatherAnswer(weatherData);
 
 				appendToConversation(userTag);
 				appendToConversation(userWeatherAsk);
 				appendToConversation(gptTag);
 				appendToConversation(weatherMessage);
+
+				setSelectedLanguage(language);
+				playBotResponse(weatherMessage.textContent, language); 
 			} else {
 				await triggerChatGPT(userQuestion);
 			}

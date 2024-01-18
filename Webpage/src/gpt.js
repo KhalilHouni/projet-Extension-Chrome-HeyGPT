@@ -77,7 +77,7 @@ async function createAnswerGpt(response) {
     return answer;
 }
 
-// Fonction pour récupérer la langue depuis le stockage local
-function setSelectedLanguage(language) {
+// Function to extract the selected language from the local storage
+export function setSelectedLanguage(language) {
     localStorage.setItem('selectedLanguage', language);
 }
