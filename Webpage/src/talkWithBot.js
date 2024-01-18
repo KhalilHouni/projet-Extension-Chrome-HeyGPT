@@ -52,10 +52,17 @@ export async function whatBotMustDo() {
 				// Perform the YouTube search
 				chrome.runtime.sendMessage({ action: 'performYouTubeSearch', query: query });
 			} else if (containWeatherWord(userQuestion)) {
+
                 const location = extractLocationFromQuestion();
 				const weatherData = await getWeatherInfo(location);
 				const weatherMessage = createWeatherAnswer(weatherData);
+
+				const userTag = createUserTag();
+                const userWeatherAsk = createUserQuestion(userQuestion);
 				const gptTag = createGptTag();
+
+				appendToConversation(userTag);
+				appendToConversation(userWeatherAsk);
 				appendToConversation(gptTag);
 				appendToConversation(weatherMessage);
 			} else {
