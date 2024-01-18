@@ -10,7 +10,8 @@ import { clearConversation,
 import { shouldPerformGoogleSearch,
 		performGoogleSearch,
 		shouldPerformGoogleImagesSearch,
-		performGoogleImagesSearch } from "./webSearch.js"
+		performGoogleImagesSearch,
+		performWikipediaSearch } from "./webSearch.js"
 
 import { getWeatherInfo, createWeatherAnswer, 
 	containWeatherWord } from "./weather.js";
@@ -45,13 +46,17 @@ export async function whatBotMustDo() {
 				// Disable ChatGPT
 				stopSpeechSynthesis();
 
+		
 				// Perform the Google Images search
 				performGoogleImagesSearch(userQuestion);
 			} else if (userQuestion.toLowerCase().includes('search on youtube')) {
 				const query = userQuestion.replace('search on youtube', '').trim();
 				// Perform the YouTube search
 				chrome.runtime.sendMessage({ action: 'performYouTubeSearch', query: query });
-			} else if (containWeatherWord(userQuestion)) {
+			} else if (userQuestion.toLowerCase().includes('search on wikipedia')) {
+                const query = userQuestion.replace('search on wikipedia', '').trim();
+                // Perform the Wikipedia search
+                performWikipediaSearch(query);} else if (containWeatherWord(userQuestion)) {
 
 				const language = document.getElementById('language-select').value; // Get the selected language
 
