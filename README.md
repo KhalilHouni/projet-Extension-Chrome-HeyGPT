@@ -1,4 +1,4 @@
-# HeyGPT - Chrome Extension
+# HeyGPT - Chrome Extension V 1.0
 
 HeyGPT is a versatile Chrome extension that seamlessly integrates ChatGPT, a weather API, and quick searches on YouTube, Google, and Wikipedia. It enables users to engage in multi-language conversations, obtain weather updates, and perform rapid searches, enhancing their browsing experience.
 
